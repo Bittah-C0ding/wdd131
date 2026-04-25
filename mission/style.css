@@ -3,7 +3,6 @@
   Course: WDD 131
 */
 
-/* Reset & base styles */
 * {
     margin: 0;
     padding: 0;
@@ -11,89 +10,72 @@
 }
 
 body {
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    line-height: 1.6;
-    color: #1a2b4c;
-    background-color: #f8f9fa;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     padding: 2rem;
 }
 
 .container {
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: 800px;
+    width: 100%;
     background: white;
     padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
 /* Logo */
 .logo {
-    display: block;
-    max-width: 180px;
-    margin: 0 auto 1.5rem auto;
+    max-width: 120px;
+    margin-bottom: 1.5rem;
 }
 
-/* Headings */
+/* Main heading */
 h1 {
     font-size: 1.8rem;
-    text-align: center;
-    color: #003b5c;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #e0e4e8;
-    padding-bottom: 0.5rem;
+    font-weight: normal;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    color: #1a3c5e;
 }
 
-h2 {
-    font-size: 1.4rem;
-    color: #2c5a7a;
-    margin: 1.5rem 0 1rem 0;
-    font-weight: 500;
+/* Mission statement paragraph */
+.mission-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    text-align: left;
 }
 
-/* Founding statement */
-.founding-statement {
-    font-size: 1.05rem;
-    background-color: #f0f4f8;
-    padding: 1.2rem;
-    border-left: 4px solid #2c5a7a;
-    margin: 1rem 0;
+/* Italicized subheading  {
+    font-size: 1rem;
+    text-align: left;
+    margin: 1rem 0 0.5rem 0;
 }
 
-/* Numbered list */
+/* Numbered list - matches mockup alignment */
 .mission-list {
-    list-style-type: none;
-    counter-reset: mission-counter;
-    margin: 1rem 0;
+    text-align: left;
+    margin: 0.5rem 0 0 1.5rem;
+    line-height: 1.6;
 }
 
 .mission-list li {
-    counter-increment: mission-counter;
-    margin-bottom: 1rem;
-    padding-left: 2.5rem;
-    position: relative;
-    font-size: 1rem;
+    margin-bottom: 0.75rem;
 }
 
-.mission-list li::before {
-    content: counter(mission-counter) ".";
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-weight: bold;
-    color: #1a6d8f;
-    font-size: 1.1rem;
-}
-
-/* Responsive */
+/* Responsive for mobile */
 @media (max-width: 600px) {
-    body {
-        padding: 1rem;
-    }
     .container {
-        padding: 1.2rem;
+        padding: 1rem;
     }
     h1 {
         font-size: 1.4rem;
+    }
+    .mission-text {
+        font-size: 1rem;
     }
 }
