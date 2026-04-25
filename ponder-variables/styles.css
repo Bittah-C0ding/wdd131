@@ -1,0 +1,148 @@
+/*
+  Programmed by: Adrian Hernandez
+  Course: WDD 131
+  Assignment: Ponder - JS Variables and Constants
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    background-color: #f4f7fb;
+    color: #1e2a3e;
+    line-height: 1.6;
+    padding: 1.5rem;
+}
+
+header {
+    background: linear-gradient(135deg, #0b3b5f, #1b4f72);
+    color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+header h1 span {
+    font-weight: 300;
+    font-size: 1.2rem;
+    background: rgba(255,255,255,0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+}
+
+header h2 {
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-top: 0.5rem;
+}
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.topic {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.8rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.topic h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #1b4f72;
+    border-left: 5px solid #2c7da0;
+    padding-left: 1rem;
+}
+
+.topic p, .topic ul {
+    margin-bottom: 1rem;
+    margin-left: 1.2rem;
+}
+
+.topic li {
+    margin-bottom: 0.3rem;
+}
+
+.code-block {
+    background: #1e2a3e;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+}
+
+.code-block pre {
+    margin: 0;
+}
+
+.code-block code {
+    font-family: inherit;
+}
+
+.console-sim {
+    background: #eaf4f9;
+}
+
+.console-output {
+    background: #0f1722;
+    color: #cbd5e6;
+    padding: 1rem;
+    border-radius: 12px;
+    font-family: monospace;
+    margin-top: 1rem;
+}
+
+.console-output h4 {
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+}
+
+#outputArea {
+    white-space: pre-wrap;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    font-size: 0.8rem;
+    color: #5a6874;
+    border-top: 1px solid #cbd5e1;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    body {
+        padding: 0.8rem;
+    }
+    header {
+        padding: 1.2rem;
+    }
+    .topic {
+        padding: 1rem;
+    }
+    .code-block {
+        font-size: 0.8rem;
+    }
+}
