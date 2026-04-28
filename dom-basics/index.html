@@ -1,0 +1,170 @@
+<!-- 
+  Programmed by: Adrian Hernandez
+  Course: WDD 131
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDD 131 - DOM Basics | HTML, CSS, and JS</title>
+    <style>
+        body {
+            background-color: #ddd;
+            font-size: 20px;
+        }
+        #content {
+            max-width: 60%;
+            margin: 40px auto;
+            border: 1px solid darkgrey;
+            padding: 50px;
+            background-color: #f5f5f5;
+            transition: background-color 0.4s ease;
+        }
+        p {
+            color: #035f9c;
+            font-size: 1.3em;
+        }
+        hr {
+            height: 3px;
+            background-color: #035f9c;
+            margin: 30px auto;
+            width: 80%;
+        }
+        h1, h2, p {
+            text-align: center;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+            width: 50%;
+        }
+        #topics {
+            width: 55%;
+            margin: 0 auto;
+            line-height: 1.5em;
+        }
+        .list {
+            list-style-type: none;
+        }
+        #dropdown-wrapper {
+            margin-top: 40px;
+            text-align: left;
+        }
+        #dropdown-wrapper label {
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        #webdevlist {
+            font-size: 0.85em;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        .section-block {
+            padding: 10px 16px;
+            border-radius: 6px;
+            transition: background-color 0.35s ease, border-left 0.35s ease;
+        }
+        .highlight-html {
+            background-color: #ffe5d0;
+            border-left: 5px solid #e44d26;
+        }
+        .highlight-css {
+            background-color: #d0e8ff;
+            border-left: 5px solid #035f9c;
+        }
+        .highlight-js {
+            background-color: #fff8c5;
+            border-left: 5px solid #f0db4f;
+        }
+        #status-msg {
+            margin-top: 12px;
+            font-size: 0.8em;
+            color: #555;
+            font-style: italic;
+            min-height: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1>HTML, CSS, and JS</h1>
+        <p>The foundational technologies that power websites and web applications</p>
+        <hr>
+        <img id="trifecta-img" src="https://wddbyui.github.io/wdd131/images/trifecta.png" alt="JS, CSS, and HTML logos">
+        <div id="topics">
+            <div id="html-section" class="section-block">
+                <h2>HyperText Markup Language</h2>
+                <ul class="list">
+                    <li>Defines the structure and content of a web page.</li>
+                    <li>Without HTML there's nothing for the browser to display.</li>
+                </ul>
+            </div>
+            <div id="css-section" class="section-block">
+                <h2>Cascading Style Sheets</h2>
+                <ul class="list">
+                    <li>Controls how the HTML elements look.</li>
+                    <li>Without CSS pages look plain and unstyled.</li>
+                </ul>
+            </div>
+            <div id="js-section" class="section-block">
+                <h2>JavaScript</h2>
+                <ul class="list">
+                    <li>Adds interactivity and dynamic behavior.</li>
+                    <li>Without JavaScript nothing on the page responds dynamically to user actions.</li>
+                </ul>
+            </div>
+        </div>
+        <div id="dropdown-wrapper">
+            <label for="webdevlist">Choose One:</label>
+            <select name="code" id="webdevlist">
+                <option>Choose One:</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="js">JavaScript</option>
+            </select>
+            <p id="status-msg"></p>
+        </div>
+    </div>
+    <script>
+        // Caching DOM references – store elements once for performance
+        const selectElem = document.getElementById('webdevlist');
+        const htmlSection = document.getElementById('html-section');
+        const cssSection = document.getElementById('css-section');
+        const jsSection = document.getElementById('js-section');
+        const statusMsg = document.getElementById('status-msg');
+        // querySelectorAll returns a NodeList of all elements matching the CSS selector
+        const allSections = document.querySelectorAll('.section-block');
+
+        // addEventListener listens for the 'change' event on the dropdown
+        selectElem.addEventListener('change', function () {
+            let codeValue = selectElem.value;  // value of selected option
+
+            // classList.remove() removes one or more CSS classes from an element
+            for (let section of allSections) {
+                section.classList.remove('highlight-html', 'highlight-css', 'highlight-js');
+            }
+
+            // classList.add() adds a CSS class to trigger new styles
+            switch (codeValue) {
+                case 'html':
+                    htmlSection.classList.add('highlight-html');
+                    statusMsg.textContent = 'Highlighting the HTML section!';
+                    break;
+                case 'css':
+                    cssSection.classList.add('highlight-css');
+                    statusMsg.textContent = 'Highlighting the CSS section!';
+                    break;
+                case 'js':
+                    jsSection.classList.add('highlight-js');
+                    statusMsg.textContent = 'Highlighting the JavaScript section!';
+                    break;
+                default:
+                    statusMsg.textContent = '';
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
