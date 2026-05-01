@@ -2,44 +2,48 @@
   Programmed by: Adrian Hernandez
   Course: WDD 131
   Assignment: Mission Statement Part 1
--->
-
-<!DOCTYPE html>
+--><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Recreation of the BYU-Idaho mission statement for WDD 131 Prove assignment.">
+    <meta name="description" content="BYU-Idaho Mission Statement with dark/light mode toggle">
     <meta name="author" content="Adrian Hernandez">
     <title>BYU-Idaho Mission Statement</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
+    <!-- Dropdown lives outside the card, fixed top-left -->
+    <select id="themeSelect">
+        <option>Choose Mode</option>
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+    </select>
+
     <div class="container">
-        <!-- Logo -->
-        <img src="byui-logo-blue.webp" alt="BYU-Idaho Logo" class="logo">
+        <h1>MISSON STATEMENT</h1>
+        <h2>BRIGHAM YOUNG UNIVERSITY-IDAHO</h2>
+        <hr>
 
-        <!-- Main heading -->
-        <h1>Brigham Young University-Idaho</h1>
-
-        <!-- Mission statement paragraph -->
         <p class="mission-text">
-            Brigham Young University-Idaho was founded and is supported and guided by 
-            The Church of Jesus Christ of Latter-day Saints. Its mission is to develop 
-            disciples of Jesus Christ who are leaders in their homes, the Church, and 
+            Brigham Young University-Idaho was founded and is supported and guided by
+            The Church of Jesus Christ of Latter-day Saints. Its mission is to develop
+            disciples of Jesus Christ who are leaders in their homes, the Church, and
             their communities.
         </p>
 
-        <!-- Italicized subheading  -->
         <p class="italic-subheading"><em>The university does this by:</em></p>
 
-        <!-- Numbered list -->
         <ol class="mission-list">
             <li>Building testimonies of the restored gospel of Jesus Christ and fostering its principles in a wholesome academic, cultural, and social environment.</li>
             <li>Providing a high-quality education that prepares students of diverse interests and abilities for lifelong learning and employment.</li>
             <li>Serving as many students as possible within resource constraints.</li>
             <li>Delivering education that is affordable for students and the Church.</li>
         </ol>
+
+        <!-- Logo at the bottom -->
+        <img id="logo" src="byui-logo-blue.webp" alt="BYU-Idaho Logo" class="logo">
     </div>
 </body>
 </html>

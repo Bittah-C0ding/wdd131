@@ -1,0 +1,137 @@
+/*
+  Mission Statement Part 2 – Dark/Light Mode
+  Programmed by: Adrian Hernandez
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background-color: #f0f4f8;
+    color: #1e2a3e;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 2rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+select {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+    z-index: 100;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.container {
+    max-width: 640px;
+    width: 100%;
+    background: white;
+    padding: 3rem 4rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 2rem;
+}
+
+h1 {
+    font-size: 2rem;
+    text-align: center;
+    color: #1e2a3e;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.6rem;
+    transition: color 0.3s ease;
+}
+
+h2 {
+    font-size: 0.85rem;
+    text-align: center;
+    color: #5b8db8;
+    letter-spacing: 0.15em;
+    font-weight: normal;
+    margin-bottom: 0.6rem;
+    transition: color 0.3s ease;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.mission-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.italic-subheading {
+    font-size: 1rem;
+    margin: 1rem 0 0.75rem 0;
+}
+
+.mission-list {
+    margin: 0 0 1.5rem 1.5rem;
+    line-height: 1.6;
+}
+
+.mission-list li {
+    margin-bottom: 0.75rem;
+}
+
+.logo {
+    display: block;
+    max-width: 130px;
+    margin: 1rem auto 0 auto;
+}
+
+/* ── Dark Mode ── */
+body.dark {
+    background-color: #2b2b2b;
+    color: #e8e8e8;
+}
+
+body.dark .container {
+    background-color: #3d3d3d;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+body.dark h1 {
+    color: #e8e8e8;
+}
+
+body.dark h2 {
+    color: #5b8db8;
+}
+
+body.dark hr {
+    border-top-color: #555;
+}
+
+body.dark select {
+    background-color: #3d3d3d;
+    color: #e8e8e8;
+    border-color: #666;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1.5rem;
+    }
+    h1 {
+        font-size: 1.4rem;
+    }
+}
