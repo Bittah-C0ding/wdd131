@@ -1,0 +1,131 @@
+---
+title: "Client Report - Project 0: Introduction"
+subtitle: "Course DS 250"
+author: "Adrian Hernandez"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+# Load the Palmer Penguins dataset
+from palmerpenguins import load_penguins
+df = load_penguins()
+```
+
+## QUESTION|TASK 1
+
+__Include the tables created from [PY4DS: CH2 Data Visualization](https://aeturrell.github.io/python4DS/data-visualise.html) used to create the above chart (Hint: copy the code from 2.2.1. The penguins data frame and paste each in the cells below)__
+
+_The `penguins` data frame contains 344 observations and 8 variables about three penguin species (Adelie, Chinstrap, and Gentoo) collected at Palmer Station, Antarctica. The table below shows the full dataset — note the mix of numeric measurements and categorical species/island labels, as well as a handful of NaN values where data was not recorded._
+
+```{python}
+# Display the full penguins data frame
+df
+```
+
+_The `head()` method shows just the first 5 rows, which is a quick way to inspect the column names, data types, and a sample of values. All five rows here are Adelie penguins from Torgersen Island, collected in 2007._
+
+```{python}
+# Display the first 5 rows of the penguins data frame
+df.head()
+```
+
+
+## QUESTION|TASK 2
+
+__Recreate the example charts from [PY4DS: CH2 Data Visualization](https://aeturrell.github.io/python4DS/data-visualise.html) of the textbook. (Hint: copy the chart code from 2.2.3. Creating a plot, one plot for each cell below)__
+
+_**Chart 1 — Basic Scatterplot:** This is the simplest scatterplot of flipper length vs. body mass. The relationship is clearly positive — penguins with longer flippers tend to be heavier. The relationship looks roughly linear with moderate scatter._
+
+```{python}
+# Chart 1: Basic scatterplot of flipper length vs body mass
+(
+    ggplot(data=df, mapping=aes(x="flipper_length_mm", y="body_mass_g"))
+    + geom_point()
+)
+```
+
+_**Chart 2 — Color by Species:** Adding a color aesthetic mapped to `species` reveals that the three species cluster in distinct regions. Gentoo penguins (green) are clearly the largest, while Adelie and Chinstrap overlap more in body size despite differing in flipper length._
+
+```{python}
+# Chart 2: Add color mapping by species
+(
+    ggplot(
+        data=df,
+        mapping=aes(x="flipper_length_mm", y="body_mass_g", color="species"),
+    )
+    + geom_point()
+)
+```
+
+_**Chart 3 — Per-Species Smooth Lines:** Adding `geom_smooth(method="lm")` with color mapped globally draws a separate regression line for each species. Each species shows a strong positive trend on its own, which is consistent with the overall pattern._
+
+```{python}
+# Chart 3: Add a linear smooth line per species
+(
+    ggplot(
+        data=df,
+        mapping=aes(x="flipper_length_mm", y="body_mass_g", color="species"),
+    )
+    + geom_point()
+    + geom_smooth(method="lm")
+)
+```
+
+_**Chart 4 — One Global Smooth Line:** By moving the `color` aesthetic to the local `geom_point()` level instead of the global `ggplot()` level, we get colored points but a single overall trend line. This makes it easier to see the global relationship across all species at once._
+
+```{python}
+# Chart 4: Color only in geom_point so smooth line is global
+(
+    ggplot(data=df, mapping=aes(x="flipper_length_mm", y="body_mass_g"))
+    + geom_point(mapping=aes(color="species"))
+    + geom_smooth(method="lm")
+)
+```
+
+_**Chart 5 — Final Polished Chart with Shapes and Labels:** This is the "ultimate goal" chart from the textbook. Mapping species to both `color` and `shape` improves accessibility for colorblind readers. The `labs()` layer adds a descriptive title, subtitle, and clean axis/legend labels. The positive, roughly linear relationship between flipper length and body mass is clearly displayed, with Gentoo penguins occupying the upper-right cluster and Adelie penguins the lower-left._
+
+```{python}
+# Chart 5: Final chart — shapes + color by species + full labels
+(
+    ggplot(data=df, mapping=aes(x="flipper_length_mm", y="body_mass_g"))
+    + geom_point(aes(color="species", shape="species"))
+    + geom_smooth(method="lm")
+    + labs(
+        title="Body mass and flipper length",
+        subtitle="Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+        x="Flipper length (mm)",
+        y="Body mass (g)",
+        color="Species",
+        shape="Species",
+    )
+)
+```
