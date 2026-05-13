@@ -1,0 +1,171 @@
+---
+title: "Client Report - Famous Names"
+subtitle: "Unit 1 Task 3"
+author: "Adrian J. Hernandez"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Load the names dataset — tries the remote URL first, falls back to local file
+try:
+    df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed69e7f1/names_year_csv.csv")
+    print("Loaded from URL")
+except Exception:
+    df = pl.read_csv("names_year_csv.csv")
+    print("Loaded from local file")
+
+print(df.shape)
+df.head(3)
+```
+
+
+
+## QUESTION 1
+
+__Make a new column that represents the total number of babies with your name for only those states in which you have lived. (If you have only ever lived in one state, pick at least one other state so you get practice summing across columns). Make a graph displaying that total for your name over time.__
+
+The name **James** was filtered from the dataset and a new column `ID_UT_total` was created by summing the counts for Idaho (ID) and Utah (UT) — the two states I have lived in. The chart shows a clear peak in the name James during the early 1980s in these two states combined, with a steady decline through the 2010s. A reference line at the peak year is included to highlight that point.
+
+```{python}
+# Q1 — Filter for the name James, create a combined ID + UT total column
+
+james = (
+    df
+    .filter(pl.col("name") == "James")
+    .with_columns(
+        (pl.col("ID") + pl.col("UT")).alias("ID_UT_total")   # sum ID and UT
+    )
+    .select(["name", "year", "ID", "UT", "ID_UT_total"])
+    .sort("year")
+)
+
+# Find the peak year for the reference mark
+peak_year = james.filter(
+    pl.col("ID_UT_total") == pl.col("ID_UT_total").max()
+)["year"][0]
+
+(
+    ggplot(james, aes(x="year", y="ID_UT_total"))
+    + geom_line(color="#1f77b4", size=1.2)
+    + geom_point(color="#1f77b4", size=2)
+    + geom_vline(xintercept=peak_year, linetype="dashed", color="tomato", size=1)
+    + geom_text(
+        x=peak_year + 1, y=james["ID_UT_total"].max() * 0.96,
+        label=f"Peak: {peak_year}",
+        color="tomato", size=10, hjust="left"
+    )
+    + scale_x_continuous(format="d")
+    + labs(
+        title="Babies Named James in Idaho & Utah Over Time",
+        x="Year",
+        y="Total Babies (ID + UT)"
+    )
+    + theme_light()
+) + theme_light()
+```
+
+
+## QUESTION 2
+
+__Let's look at a name that is special for members of the church: Brigham. For each year, calculate what proportion of babies named Brigham in the country were born specifically in Idaho and Utah? Make a graph displaying the proportion over time.__
+
+For the name **Brigham**, a proportion column was created showing how much of the national total was born in Idaho or Utah each year. Historically nearly 100% of babies named Brigham were born in Utah. A 50% reference line is included for context.
+
+```{python}
+# Q2 — Brigham: proportion born in ID and UT out of national Total each year
+
+brigham = (
+    df
+    .filter(pl.col("name") == "Brigham")
+    .with_columns(
+        ((pl.col("ID") + pl.col("UT")) / pl.col("Total")).alias("id_ut_proportion")
+    )
+    .select(["name", "year", "ID", "UT", "Total", "id_ut_proportion"])
+    .sort("year")
+)
+
+(
+    ggplot(brigham, aes(x="year", y="id_ut_proportion"))
+    + geom_line(color="#2ca02c", size=1.2)
+    + geom_point(color="#2ca02c", size=2.5)
+    + geom_hline(yintercept=0.5, linetype="dashed", color="gray", size=1)
+    + geom_text(
+        x=brigham["year"].min() + 1, y=0.52,
+        label="50% threshold",
+        color="gray", size=10, hjust="left"
+    )
+    + scale_x_continuous(format="d")
+    + scale_y_continuous(
+        limits=[0, 1.05],
+        labels=["0%", "25%", "50%", "75%", "100%"],
+        breaks=[0, 0.25, 0.5, 0.75, 1.0]
+    )
+    + labs(
+        title="Proportion of Babies Named Brigham Born in Idaho & Utah",
+        x="Year",
+        y="Proportion (ID + UT / National Total)"
+    )
+    + theme_light()
+)  + theme_light()
+```
+
+
+## QUESTION 3
+
+__Consider doing some data validation. For the name David, calculate a sum of all 50 states and District of Columbia for each year. Now compare that total to the value in the 'Total' column. In which years, if any, do they not agree?__
+
+A `state_sum` column was created by adding all 51 geographic columns (50 states + DC) for each year where the name is **David**, then compared against the `Total` column. After filtering for mismatches, the table is empty — meaning the state-level sum matches `Total` perfectly for every year. The data is internally consistent with no discrepancies.
+
+```{python}
+# Q3 — Data validation: sum all state columns for David and compare to Total
+
+# All geographic columns (everything except name, year, Total)
+state_cols = [c for c in df.columns if c not in ["name", "year", "Total"]]
+
+david = (
+    df
+    .filter(pl.col("name") == "David")
+    .with_columns(
+        pl.sum_horizontal([pl.col(c) for c in state_cols]).alias("state_sum")
+    )
+    .with_columns(
+        (pl.col("state_sum") == pl.col("Total")).alias("match")
+    )
+    .select(["year", "Total", "state_sum", "match"])
+    .sort("year")
+)
+
+# Show only rows where the sums do NOT match
+mismatches = david.filter(pl.col("match") == False)
+
+print(f"Number of mismatching years: {len(mismatches)}")
+print(mismatches)
+```

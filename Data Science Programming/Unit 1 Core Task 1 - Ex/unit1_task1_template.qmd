@@ -1,0 +1,113 @@
+---
+title: "Client Report - Exploring Names"
+subtitle: "Unit 1 Task 1"
+author: "Adrian Hernandez"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Load the names dataset
+df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed69e7f1/names_year_csv.csv")
+```
+
+## QUESTION 1
+
+__What was the earliest year that the name 'Felisha' was used?__
+
+The earliest year the name 'Felisha' appears in the dataset is **1964**.
+
+```{python}
+# Q1 - Filter for 'Felisha' and find the minimum year
+(
+    df
+    .filter(pl.col("name") == "Felisha")
+    .select(pl.col("year").min().alias("earliest_year"))
+)
+```
+
+
+## QUESTION 2
+
+__What year had the most babies named 'David'? How many babies were named 'David' that year?__
+
+The name 'David' reached its peak in **1955**, with **86,389** babies given that name that year.
+
+```{python}
+# Q2 - Filter for 'David', sort by Total descending, return the top row
+(
+    df
+    .filter(pl.col("name") == "David")
+    .sort("Total", descending=True)
+    .select(["name", "year", "Total"])
+    .head(1)
+)
+```
+
+
+## QUESTION 3
+
+__What year did your name hit its peak? How many babies were named your name in that year?__
+
+The name 'Adrian' hit its peak in **2008**, with **8,050** babies named Adrian that year.
+
+```{python}
+# Q3 - Filter for 'Adrian', sort by Total descending, return the top row
+(
+    df
+    .filter(pl.col("name") == "Adrian")
+    .sort("Total", descending=True)
+    .select(["name", "year", "Total"])
+    .head(1)
+)
+```
+
+
+## QUESTION 4
+
+__In the most recent year, what was the most common female name in Utah?__
+
+In the most recent year of data (2024), the most common female name in Utah was **Olivia**, with **215** babies given that name.
+
+```{python}
+# Q4 - Find the most recent year, filter to it, sort by Utah count
+most_recent_year = df.select(pl.col("year").max()).item()
+
+(
+    df
+    .filter(pl.col("year") == most_recent_year)
+    .sort("UT", descending=True)
+    .select(["name", "year", "UT"])
+    .head(10)
+)
+```
+
+
+---

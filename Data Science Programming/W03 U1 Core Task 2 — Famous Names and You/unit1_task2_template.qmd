@@ -1,0 +1,139 @@
+---
+title: "Client Report - What's in a Name?"
+subtitle: "Unit 1 Task 2"
+author: "Adrian Hernandez"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Load the names dataset
+df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed69e7f1/names_year_csv.csv")
+```
+
+## QUESTION 1
+
+__How does your name at your birth year compare to its use historically?__
+
+The name 'Adrian' has been used since the early 1900s but grew significantly in popularity starting in the 1970s, peaking in **2008** with **8,050** babies. At my birth year of **2005**, there were about **7,734** babies named Adrian, which was very close to the peak — meaning I was born during one of the most popular periods for this name in history. The red dashed line marks my birth year on the chart.
+
+```{python}
+# Q1 - Plot Adrian name usage over time with a reference mark at birth year
+
+# Filter for Adrian and sort by year
+adrian = df.filter(pl.col("name") == "Adrian").sort("year")
+
+# Birth year - change this to your actual birth year if different
+birth_year = 2005
+
+(
+    ggplot(adrian, aes(x="year", y="Total")) +
+    geom_line(color="#2196F3", size=1) +
+    # Reference mark
+    geom_vline(xintercept=birth_year, color="red", linetype="dashed", size=1) +
+    annotate(
+        "text", x=birth_year + 1, y=7000,
+        label="My Birth Year (2005)",
+        color="red", size=10, hjust=0
+    ) +
+    scale_x_continuous(format="d") +  
+    labs(
+        title="Usage of the Name 'Adrian' Over Time",
+        x="Year",
+        y="Number of Babies Named Adrian"
+    ) +
+    theme_light()
+)
+```
+
+
+## QUESTION 2
+
+__Think of a unique name from a famous movie. Plot the usage of that name and see how changes line up with the movie release. Does it look like the movie had an effect on usage?__
+
+The name **Elsa** from Disney's *Frozen* (released November 2013) is a great example of a movie influencing naming trends. Before the film, the name Elsa was steadily declining in popularity. After its release, the name nearly **doubled** in 2014 — jumping from 526 babies in 2013 to **1,107** in 2014 — before gradually declining again. This strongly suggests the movie had a major effect on the name's usage.
+
+```{python}
+# Q2 - Plot Elsa name usage with reference mark at Frozen's release year (2013)
+
+# Filter for Elsa and sort by year
+elsa = df.filter(pl.col("name") == "Elsa").sort("year")
+
+(
+    ggplot(elsa, aes(x="year", y="Total")) +
+    geom_line(color="#9C27B0", size=1) +
+    # Reference mark 
+    geom_vline(xintercept=2013, color="orange", linetype="dashed", size=1) +
+    annotate(
+        "text", x=2014, y=900,
+        label="Frozen Released (2013)",
+        color="orange", size=10, hjust=0
+    ) +
+    scale_x_continuous(format="d") + 
+    labs(
+        title="Usage of the Name 'Elsa' Over Time",
+        x="Year",
+        y="Number of Babies Named Elsa"
+    ) +
+    theme_light()
+)
+```
+
+## QUESTION 3
+
+__Mary, Martha, Peter, and Paul are all Christian names. From 1920 - 2000, compare the name usage of each of the four names in a single chart. What trends do you notice?__
+
+From 1920 to 2000, **Mary** was by far the most popular of the four names, peaking around **1921** with over 74,000 babies. All four names followed a similar pattern — rising through the mid-20th century and then declining significantly after the 1960s and 70s. **Paul** and **Peter** peaked around 1957, while **Martha** peaked around 1947. By 2000, all four names had dropped to a fraction of their peak usage, suggesting a general decline in traditional Christian names during the latter half of the century.
+
+```{python}
+# Q3 - Compare Mary, Martha, Peter, and Paul from 1920 to 2000 in one chart
+
+# Filter for the four names and the year range 1920-2000
+christian_names = (
+    df
+    .filter(pl.col("name").is_in(["Mary", "Martha", "Peter", "Paul"]))
+    .filter((pl.col("year") >= 1920) & (pl.col("year") <= 2000))
+    .select(["name", "year", "Total"])
+    .sort("year")
+)
+
+(
+    ggplot(christian_names, aes(x="year", y="Total", color="name")) +
+    geom_line(size=1) +
+    scale_x_continuous(format="d") + 
+    labs(
+        title="Christian Name Usage from 1920 to 2000",
+        x="Year",
+        y="Number of Babies",
+        color="Name"
+    ) +
+    theme_light()
+)
+```
