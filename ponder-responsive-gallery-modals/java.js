@@ -6,13 +6,11 @@ const closeButton = modal.querySelector('.close-viewer');
 
 function openModal(e) {
     let target = e.target;
-    // Find the actual image element inside the clicked figure
     if (target.tagName !== 'IMG') {
         target = target.querySelector('img');
         if (!target) return;
     }
     const smallSrc = target.getAttribute('src');
-    // Replace '-sm.jpg' with '-full.jpg' to get the high-res version
     const largeSrc = smallSrc.replace('-sm.jpg', '-full.jpg');
     modalImage.setAttribute('src', largeSrc);
     modal.showModal();
