@@ -4,15 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Cool Pics – responsive image gallery with mobile‑first design">
+  <meta name="description" content="Cool Pics – responsive gallery with mobile menu and modal">
   <meta name="author" content="Adrian Hernandez">
   <title>Cool Pics 📷</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <header>
     <h1>Cool Pics 📷</h1>
-    <nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
+    </button>
+    <nav id="mainNav">
       <a href="#">Home</a>
       <a href="#">People</a>
       <a href="#">Places</a>
@@ -23,32 +29,32 @@
 
   <main class="gallery">
     <div class="card">
-      <img src="norris-sm.jpg" alt="Gallery image">
+      <img src="norris-sm.jpg" alt="Norris image 1" class="gallery-img">
       <h2>Norris 1</h2>
       <p>Awesome view</p>
     </div>
     <div class="card">
-      <img src="norris-sm.jpg" alt="Gallery image">
+      <img src="norris-sm.jpg" alt="Norris image 2" class="gallery-img">
       <h2>Norris 2</h2>
       <p>Beautiful scenery</p>
     </div>
     <div class="card">
-      <img src="norris-sm.jpg" alt="Gallery image">
+      <img src="norris-sm.jpg" alt="Norris image 3" class="gallery-img">
       <h2>Norris 3</h2>
       <p>Great capture</p>
     </div>
     <div class="card">
-      <img src="norris-sm.jpg" alt="Gallery image">
+      <img src="norris-sm.jpg" alt="Norris image 4" class="gallery-img">
       <h2>Norris 4</h2>
       <p>Stunning shot</p>
     </div>
     <div class="card">
-      <img src="norris-sm.jpg" alt="Gallery image">
+      <img src="norris-sm.jpg" alt="Norris image 5" class="gallery-img">
       <h2>Norris 5</h2>
       <p>Amazing light</p>
     </div>
     <div class="card">
-      <img src="norris-sm.jpg" alt="Gallery image">
+      <img src="norris-sm.jpg" alt="Norris image 6" class="gallery-img">
       <h2>Norris 6</h2>
       <p>Perfect moment</p>
     </div>
@@ -57,5 +63,10 @@
   <footer>
     <p>&copy; 2026 Adrian Hernandez | Cool Pics Gallery</p>
   </footer>
+
+  <dialog id="imageModal">
+    <img id="modalImage" src="" alt="Large view">
+    <button id="closeModalBtn" class="close-modal">X</button>
+  </dialog>
 </body>
 </html>
