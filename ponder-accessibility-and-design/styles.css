@@ -6,7 +6,6 @@ body {
   line-height: 1.6;
 }
 
-/* Skip link - hidden until focused */
 .skip-link {
   position: absolute;
   top: -40px;
@@ -52,16 +51,15 @@ header, footer {
 
 #movie-list {
   padding: 0 1rem;
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
-/* Mobile first: movies stack vertically */
 .movie {
   border: 2px solid #ccc;
   padding: 1rem;
   border-radius: 10px;
-  margin: 20px 0;
+  margin: 20px auto;
   background-color: #fff;
 }
 .movie h2 {
@@ -85,26 +83,14 @@ header, footer {
   font-style: italic;
 }
 
-/* Tablet and desktop: grid layout */
 @media (min-width: 600px) {
   .main-nav {
     flex-direction: row;
     justify-content: center;
     gap: 2rem;
   }
-  #movie-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    padding: 0 2rem;
-  }
+  /* No grid for movies – keep stacked */
   .movie {
-    margin: 0;
-  }
-}
-
-@media (min-width: 1000px) {
-  #movie-list {
-    gap: 2rem;
+    max-width: 700px;
   }
 }
