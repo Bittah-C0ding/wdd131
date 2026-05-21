@@ -1,0 +1,150 @@
+---
+title: "Client Report - Flights: Column Aggregation"
+subtitle: "Unit 2 Task 2"
+author: "Adrian J. Hernandez"
+format:
+  html:
+    self-contained: true
+    embed-resources: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import requests
+import io
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+url = "https://raw.githubusercontent.com/byuidatascience/data4missing/master/data-raw/flights_missing/flights_missing.json"
+response = requests.get(url)
+df = pl.read_json(io.BytesIO(response.content))
+
+# num_of_delays_carrier is stored as string with "1500+" entries
+# Replace "1500+" with 1500 and cast to integer
+df = df.with_columns([
+    pl.col("num_of_delays_carrier")
+      .str.replace(r"1500\+", "1500")
+      .cast(pl.Int64)
+      .alias("num_of_delays_carrier")
+])
+```
+
+## QUESTION 1
+
+__Calculate the sample size (i.e. number of rows in the dataset) for each airport in each year.__ What do you notice?
+
+The dataset covers 7 airports from 2005 to 2015. Most airport-year combinations have 12 rows (one per month), which is expected. However, some year-airport combos have fewer than 12 rows, indicating missing months. ATL stands out with 23 rows where the `year` column is null — meaning those records have missing year values that would need to be handled before any year-based analysis.
+
+```{python}
+# Count number of rows per airport per year
+sample_size = (
+    df.group_by(["airport_code", "year"])
+    .len()
+    .sort(["airport_code", "year"])
+    .rename({"len": "num_rows"})
+)
+
+sample_size
+```
+
+## QUESTION 2
+
+__Which airport has the worst delays?__
+
+I chose **proportion of delayed flights** as the primary metric because it accounts for differences in airport size — a large hub like ATL naturally has more total delays just by volume. Proportion tells us how likely *any given flight* is to be delayed, which is most meaningful for travelers and a booking app CEO.
+
+By that measure, **SFO (San Francisco)** has the worst delays at **26.1%** of all flights delayed. Chicago O'Hare (ORD) is close behind at **23.1%**. SFO also has the highest average delay time among the top airports at just over **1 hour per delayed flight**, reinforcing it as the worst overall airport for delay risk.
+
+```{python}
+# Build summary table: total flights, delayed, proportion, avg delay hours
+summary = (
+    df.group_by("airport_code")
+    .agg([
+        pl.col("num_of_flights_total").sum().alias("total_flights"),
+        pl.col("num_of_delays_total").sum().alias("total_delayed"),
+        pl.col("minutes_delayed_total").sum().alias("total_minutes_delayed"),
+    ])
+    .with_columns([
+        (pl.col("total_delayed") / pl.col("total_flights"))
+          .round(4).alias("prop_delayed"),
+        (pl.col("total_minutes_delayed") / pl.col("total_delayed") / 60)
+          .round(2).alias("avg_delay_hours"),
+    ])
+    .drop("total_minutes_delayed")
+    .sort("prop_delayed", descending=True)
+)
+
+summary
+```
+
+## QUESTION 3
+
+__Create a barplot showing the proportion of all flights that are delayed at each airport.__
+
+The chart clearly shows **SFO** as the worst airport — more than 1 in 4 flights is delayed. **ORD** is a close second. On the other end, **SLC (Salt Lake City)** is the best-performing airport with only about 14.6% of flights delayed, nearly half the rate of SFO. For travelers using the client's app, avoiding SFO and ORD — especially in winter months — would meaningfully reduce the chance of a delay.
+
+```{python}
+# Add a formatted string label column for each bar (avoids lets_plot lambda issue)
+plot_data = summary.with_columns(
+    pl.col("prop_delayed")
+      .map_elements(lambda x: f"{x*100:.1f}%", return_dtype=pl.Utf8)
+      .alias("pct_label")
+)
+
+# Build bar chart
+chart = (
+    ggplot(plot_data, aes(x="airport_code", y="prop_delayed"))
+    + geom_bar(
+        aes(fill="prop_delayed"),
+        stat="identity",
+        show_legend=False
+    )
+    + scale_x_discrete(limits=plot_data["airport_code"].to_list())
+    + scale_fill_gradient(low="#a8c6e8", high="#1a4f8a")
+    + geom_text(
+        aes(label="pct_label"),
+        position=position_nudge(y=0.003),
+        size=9,
+        color="#333333"
+    )
+    + scale_y_continuous(limits=[0, 0.30])
+    + labs(
+        title="Proportion of Flights Delayed by Airport (2005-2015)",
+        subtitle="SFO has the highest delay rate; SLC the lowest",
+        x="Airport",
+        y="Proportion of Flights Delayed",
+        caption="Source: Bureau of Transportation Statistics"
+    )
+    + theme_light()
+    + theme(
+        plot_title=element_text(size=14, face="bold"),
+        plot_subtitle=element_text(size=10, color="#555555"),
+        axis_text=element_text(size=10),
+        axis_title=element_text(size=11)
+    )
+)
+
+chart
+```

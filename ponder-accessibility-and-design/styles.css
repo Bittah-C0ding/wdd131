@@ -1,0 +1,110 @@
+/* Made by Adrian Hernandez */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Skip link - hidden until focused */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+header, footer {
+  background-color: #222;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.main-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.main-nav li {
+  padding: 0;
+}
+.main-nav a {
+  color: #ffc107;
+  text-decoration: none;
+  font-weight: bold;
+}
+.main-nav a:hover,
+.main-nav a:focus {
+  text-decoration: underline;
+}
+
+#movie-list {
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Mobile first: movies stack vertically */
+.movie {
+  border: 2px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+  margin: 20px 0;
+  background-color: #fff;
+}
+.movie h2 {
+  color: #b30059;
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 20px 0;
+}
+.movie p {
+  padding-left: 20px;
+  margin: 0.5rem 0;
+}
+.movie img {
+  max-width: 100%;
+  display: block;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+#desc1, #desc2 {
+  margin-top: 0.75rem;
+  font-style: italic;
+}
+
+/* Tablet and desktop: grid layout */
+@media (min-width: 600px) {
+  .main-nav {
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+  }
+  #movie-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 0 2rem;
+  }
+  .movie {
+    margin: 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  #movie-list {
+    gap: 2rem;
+  }
+}
