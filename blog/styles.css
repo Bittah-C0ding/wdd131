@@ -1,0 +1,158 @@
+/* Made by Adrian Hernandez */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #1a1a1a;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+header {
+  background-color: #2c3e66;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  margin-top: 0.5rem;
+}
+.nav-links li {
+  padding: 0;
+}
+.nav-links a {
+  color: #ffc107;
+  text-decoration: none;
+  font-weight: bold;
+}
+.nav-links a:hover,
+.nav-links a:focus {
+  text-decoration: underline;
+}
+
+.blog-grid {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  /* Grid layout – single column on mobile */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.book-card {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.book-meta {
+  background-color: #f0f4f8;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+.book-meta p {
+  margin: 0.25rem 0;
+}
+.date {
+  font-weight: bold;
+  color: #2c3e66;
+}
+.age, .genre {
+  font-size: 0.9rem;
+  color: #4a627a;
+}
+
+.book-content h2 {
+  color: #b30059;
+  margin-bottom: 1rem;
+}
+.book-content figure {
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+.book-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.book-content figcaption {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+.book-content p {
+  margin-bottom: 0.75rem;
+}
+.author {
+  font-style: italic;
+  font-weight: bold;
+  color: #2c3e66;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #2c3e66;
+  color: white;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+}
+
+/* Tablet and desktop layout – use grid for two columns */
+@media (min-width: 700px) {
+  .nav-links {
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .book-card {
+    grid-template-columns: 1fr 2fr;
+    align-items: start;
+  }
+  .book-meta {
+    text-align: left;
+  }
+}
+
+@media (min-width: 1000px) {
+  .blog-grid {
+    max-width: 1000px;
+  }
+}
