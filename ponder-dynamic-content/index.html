@@ -1,0 +1,41 @@
+<!-- Made by Adrian Hernandez -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dynamic movie reviews loaded with JavaScript">
+  <meta name="author" content="Adrian Hernandez">
+  <title>Flick Picks – Dynamic Movies</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header>
+    <h1>Flick Picks</h1>
+    <nav aria-label="Main navigation">
+      <ul class="main-nav">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content" role="main">
+    <!-- Sort button -->
+    <div class="sort-controls">
+      <button id="sortBtn" class="sort-btn">Sort by Rating ★</button>
+    </div>
+    <section id="movie-list" aria-label="Movie Reviews">
+      <!-- Movies injected by JavaScript -->
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Flick Picks | Adrian Hernandez</p>
+  </footer>
+</body>
+</html>
