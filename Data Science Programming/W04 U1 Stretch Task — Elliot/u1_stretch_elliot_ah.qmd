@@ -22,169 +22,41 @@ execute:
   message: false
 ---
 
-## Background
+## The Elliot Chart — A Famous Movie Name
 
-Early in prehistory, some descriptive names began to be used again and again until they formed a name pool for a particular culture. Parents would choose names from the pool of existing names rather than invent new ones for their children.
-
-With the rise of Christianity, certain trends in naming practices manifested. Christians were encouraged to name their children after saints and martyrs of the church. These early Christian names can be found in many cultures today, in various forms.
-
-By the Middle Ages, the Christian influence on naming practices was pervasive. Each culture had its pool of names — a combination of native names and early Christian names that had been in the language long enough to be considered native.
-
-This project explores how the usage of specific names has shifted over time using U.S. baby name data from 1910 to 2024.
-
----
-
-## Setup
+*E.T. the Extra‑Terrestrial* (1982) featured a boy named **Elliott** as the main character.  
+The assignment asks us to reproduce the “Elliot” chart, which shows how the name **Elliot** changed over time, including the spike following the movie’s release.
 
 ```{python}
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
 
 # Load data
-df = pd.read_csv("names_year_csv.csv")
+url = "https://raw.githubusercontent.com/byuidatascience/data4names/master/data-raw/names_year/names_year.csv"
+df = pd.read_csv(url)
 
-df.head()
+# Filter for the exact spelling "Elliot" 
+df_elliot = df[df["name"] == "Elliot"]
+
+# Aggregate total per year for the name "Elliot"
+elliot_yearly = df_elliot.groupby("year", as_index=False)["Total"].sum()
+
+# Reproduce the Elliot chart with a reference line at 1982
+plot = (
+    ggplot(elliot_yearly, aes(x="year", y="Total"))
+    + geom_line(color="#e377c2", size=1.2)
+    + geom_vline(xintercept=1982, linetype="dashed", color="red", size=1)
+    + geom_text(x=1982, y=1500, label="E.T. released (1982)", color="red", hjust="left")
+    + scale_x_continuous(format="d")
+    + labs(
+        title="Popularity of the Name 'Elliot' Over Time",
+        subtitle="The name surged after the release of E.T. the Extra‑Terrestrial",
+        x="Year",
+        y="Number of Babies Named"
+    )
+    + theme_minimal()
+)
+plot.show()
 ```
-
----
-
-## Biblical Names: Mary, Martha, Peter, and Paul
-
-The client is interested in how usage of classic biblical names — **Mary**, **Martha**, **Peter**, and **Paul** — has changed over time.
-
-```{python}
-biblical = ["Mary", "Martha", "Peter", "Paul"]
-df_biblical = df[df["name"].isin(biblical)][["name", "year", "Total"]]
-
-fig1 = px.line(
-    df_biblical,
-    x="year",
-    y="Total",
-    color="name",
-    title="Usage of Biblical Names Over Time (1910–2024)",
-    labels={"year": "Year", "Total": "Number of Babies Named", "name": "Name"},
-    color_discrete_map={
-        "Mary":   "#1f77b4",
-        "Martha": "#ff7f0e",
-        "Peter":  "#2ca02c",
-        "Paul":   "#d62728"
-    }
-)
-
-fig1.update_layout(
-    legend_title_text="Name",
-    hovermode="x unified",
-    template="plotly_white",
-    title_font_size=18,
-    xaxis=dict(showgrid=True, gridcolor="#e0e0e0"),
-    yaxis=dict(showgrid=True, gridcolor="#e0e0e0")
-)
-
-fig1.add_vline(
-    x=1940, line_dash="dot", line_color="gray",
-    annotation_text="WWII era",
-    annotation_position="top left"
-)
-
-fig1.show()
-```
-
-**Observations:**
-
-- **Mary** was by far the most popular of the four, peaking around the late 1940s–1950s before declining sharply.
-- **Martha** and **Paul** followed similar mid-century arcs, rising through the 1940s–1950s then falling.
-- **Peter** remained relatively low and steady throughout the century.
-- All four names have declined significantly since their mid-century peaks, reflecting a broader cultural shift away from traditional biblical names.
-
----
-
-## The Elliot Chart — A Famous Movie Name
-
-*E.T. the Extra-Terrestrial* (1982) featured a boy named **Elliott** as the main character. The assignment asks us to reproduce the "Elliot" chart, which shows how the name **Elliott** (and its alternate spelling **Elliot**) changed over time — including the spike following the movie's release.
-
-```{python}
-df_elliot  = df[df["name"] == "Elliot"][["name", "year", "Total"]]
-df_elliott = df[df["name"] == "Elliott"][["name", "year", "Total"]]
-
-fig2 = go.Figure()
-
-fig2.add_trace(go.Scatter(
-    x=df_elliot["year"],
-    y=df_elliot["Total"],
-    mode="lines",
-    name="Elliot",
-    line=dict(color="#e377c2", width=2.5)
-))
-
-fig2.add_trace(go.Scatter(
-    x=df_elliott["year"],
-    y=df_elliott["Total"],
-    mode="lines",
-    name="Elliott",
-    line=dict(color="#17becf", width=2.5)
-))
-
-# Combined total
-df_combined = (
-    pd.concat([df_elliot, df_elliott])
-    .groupby("year")["Total"]
-    .sum()
-    .reset_index()
-)
-df_combined["name"] = "Elliot + Elliott (combined)"
-
-fig2.add_trace(go.Scatter(
-    x=df_combined["year"],
-    y=df_combined["Total"],
-    mode="lines",
-    name="Combined",
-    line=dict(color="#2ca02c", width=2, dash="dash")
-))
-
-# Vertical line for E.T. release
-fig2.add_vline(
-    x=1982,
-    line_dash="dash",
-    line_color="red",
-    annotation_text="E.T. released (1982)",
-    annotation_position="top right",
-    annotation_font_color="red"
-)
-
-fig2.update_layout(
-    title="The Name 'Elliot/Elliott' Over Time — The E.T. Effect",
-    xaxis_title="Year",
-    yaxis_title="Number of Babies Named",
-    legend_title_text="Spelling",
-    template="plotly_white",
-    hovermode="x unified",
-    title_font_size=18,
-    xaxis=dict(showgrid=True, gridcolor="#e0e0e0"),
-    yaxis=dict(showgrid=True, gridcolor="#e0e0e0")
-)
-
-fig2.show()
-```
-
-**Observations:**
-
-- Both spellings of the name were relatively uncommon before 1982.
-- After the release of *E.T. the Extra-Terrestrial* in 1982, **Elliott** (double-t) saw a noticeable rise in popularity — a classic example of pop culture influencing naming trends.
-- The combined total shows the overall surge clearly, with the name continuing to grow in popularity through the 1990s and into the 2000s.
-- The single-t spelling **Elliot** has grown even more strongly in recent decades, overtaking **Elliott** in many years.
-
----
-
-## Summary
-
-| Name | Peak Year (approx.) | Peak Count | Trend |
-|------|-------------------|------------|-------|
-| Mary | ~1921 | ~74,000 | Sharp decline after 1960s |
-| Martha | ~1947 | ~16,000 | Steady decline since |
-| Paul | ~1954 | ~26,000 | Steady decline since |
-| Peter | ~1955 | ~10,000 | Gradual decline |
-| Elliott | ~2019 | ~3,069 | Rising since 1982 |
-| Elliot | ~2017 | ~2,896 | Strongly rising |
-
-The data illustrates two distinct naming phenomena: the gradual cultural fade of mid-century Christian names, and the sudden boost a name can receive from a beloved film character.

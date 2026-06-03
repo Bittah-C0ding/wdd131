@@ -1,0 +1,198 @@
+---
+title: "Client Report - Missing values"
+subtitle: "Unit 2 Task 3"
+author: "Adrian J. Hernandez"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import requests
+import io
+import json
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+# Read fresh copy of the flights dataset from the provided URL
+url = "https://raw.githubusercontent.com/byuidatascience/data4missing/master/data-raw/flights_missing/flights_missing.json"
+response = requests.get(url)
+df = pl.read_json(io.BytesIO(response.content))
+```
+
+## QUESTION 1
+
+1. __Convert values to missing__ Start with a fresh copy of the flights dataset by reading it in from the link provided above (as opposed to starting with the dataset you ended with in the last assignment). Identify data values that are problematic, non-sense or impossible and change them to be missing. In your report include one record example (one row) from your clean data, in the raw JSON format. Your example should display at least one missing value so that we can verify it was done correctly. (Note: JSON will convert NaN's to null). Describe your process for finding values that needed to be changed, and how you changed them.
+
+To find problematic values, I examined each column's data type, unique values (for categorical/string columns), and range of numeric values. Two main issues were found:
+
+1. **The `month` column** contains the string `"n/a"` in some rows instead of a real month name. These were replaced with `null`.
+2. **The `num_of_delays_late_aircraft` column** contains `-999` as a sentinel value — an impossible negative delay count. These were also replaced with `null`.
+
+After cleaning, one row containing a `null` month is shown below in raw JSON format to confirm the replacement was applied correctly.
+
+```{python}
+# ── Step 1: Preview the raw data to spot problems ────────────────────────────
+print("Unique month values (showing 'n/a'):")
+print(df["month"].unique().sort())
+
+# Check for -999 and "1500+" in a few numeric columns
+print("\nMin of num_of_delays_late_aircraft:", df["num_of_delays_late_aircraft"].min())
+print("Sample values in num_of_delays_carrier:", df["num_of_delays_carrier"].head(5).to_list())
+```
+
+```{python}
+# ── Step 2: Replace problematic values with null ─────────────────────────────
+# Start with a clean copy
+df_clean = df
+
+# 2a. Replace "n/a" in month
+df_clean = df_clean.with_columns(
+    pl.when(pl.col("month") == "n/a")
+      .then(None)
+      .otherwise(pl.col("month"))
+      .alias("month")
+)
+
+# 2b. For all numeric delay columns, replace -999 and "1500+" with null,
+#     then cast to Float64
+numeric_problem_cols = [c for c in df_clean.columns 
+                        if c.startswith("num_of") or c.startswith("minutes_delayed")]
+
+for col in numeric_problem_cols:
+    df_clean = df_clean.with_columns(
+        pl.when(
+            pl.col(col).cast(pl.Utf8).is_in(["-999", "1500+"])
+        )
+        .then(None)
+        .otherwise(pl.col(col).cast(pl.Float64, strict=False))
+        .alias(col)
+    )
+
+# Confirm cleaning
+print("Null count in month:", df_clean["month"].null_count())
+print("Null count in num_of_delays_late_aircraft:", 
+      df_clean["num_of_delays_late_aircraft"].null_count())
+print("Null count in num_of_delays_carrier (should be >0 if '1500+' existed):",
+      df_clean["num_of_delays_carrier"].null_count())
+```
+
+```{python}
+# ── Step 3: Show one cleaned row that contains a null, in raw JSON format ────
+# Use the first row where month is null
+example_row = df_clean.filter(pl.col("month").is_null()).head(1)
+
+example_json = json.loads(example_row.write_json())
+print(json.dumps(example_json[0], indent=2))
+```
+
+## QUESTION 2
+
+2. __Filling in missing data__ For all the "minutes_delayed" columns, fill in any missing values with the median of that column. For the "num_of" columns, fill in missing values with that column's mean.
+
+_Nothing to write/report for this question_
+
+```{python}
+# ── Identify the two groups of columns ───────────────────────────────────────
+# At this point all columns we need are already Float64
+
+minutes_cols = [c for c in df_clean.columns if c.startswith("minutes_delayed")]
+num_of_cols  = [c for c in df_clean.columns if c.startswith("num_of")]
+
+print("minutes_delayed columns:", minutes_cols)
+print("num_of columns:", num_of_cols)
+```
+
+```{python}
+# ── Fill minutes_delayed columns with each column's median ───────────────────
+fill_minutes = [
+    pl.col(c).fill_null(pl.col(c).median()).alias(c)
+    for c in minutes_cols
+]
+
+# ── Fill num_of columns with each column's mean ──────────────────────────────
+fill_num_of = [
+    pl.col(c).fill_null(pl.col(c).mean()).alias(c)
+    for c in num_of_cols
+]
+
+df_filled = df_clean.with_columns(fill_minutes + fill_num_of)
+
+# Verify: null counts for these columns should now be 0
+print("Remaining nulls in minutes_delayed columns:")
+print(df_filled.select(minutes_cols).null_count())
+
+print("\nRemaining nulls in num_of columns:")
+print(df_filled.select(num_of_cols).null_count())
+```
+
+## QUESTION 3
+ 
+3. __Display a histogram for num_of_delays_carrier and for minutes_delayed_nas (2 separate histograms in total). Comment on the shape of each one. Also report the mean of each of these columns now that missing values have been filled in.__
+
+**num_of_delays_carrier** — The distribution is strongly right-skewed (positively skewed). Most airports in most months experience a relatively small number of carrier-caused delays, but a long right tail shows that in some months the count can be very high. This is typical of count data.
+
+**minutes_delayed_nas** — This distribution is also right-skewed. The majority of observations cluster at lower total minutes, but there are occasional months with very large NAS (National Aviation System) delay totals. The skew is slightly more pronounced than for carrier delays because NAS delays can stack up quickly during widespread weather or ATC events.
+
+```{python}
+# ── Mean of each column (after imputation) ────────────────────────────────────
+mean_carrier = df_filled["num_of_delays_carrier"].mean()
+mean_nas_min = df_filled["minutes_delayed_nas"].mean()
+
+print(f"Mean of num_of_delays_carrier  : {mean_carrier:.2f}")
+print(f"Mean of minutes_delayed_nas    : {mean_nas_min:.2f}")
+```
+
+```{python}
+# ── Histogram 1: num_of_delays_carrier ───────────────────────────────────────
+(
+    ggplot(df_filled, aes(x="num_of_delays_carrier"))
+    + geom_histogram(binwidth=50, fill="#1f77b4", color="white", alpha=0.85)
+    + labs(
+        title="Distribution of Carrier‑Caused Delays",
+        subtitle="Number of delays attributed to the airline (per airport‑month)",
+        x="Number of Carrier Delays",
+        y="Count",
+    )
+    + theme_minimal()
+)
+```
+
+```{python}
+# ── Histogram 2: minutes_delayed_nas ─────────────────────────────────────────
+(
+    ggplot(df_filled, aes(x="minutes_delayed_nas"))
+    + geom_histogram(binwidth=5000, fill="#ff7f0e", color="white", alpha=0.85)
+    + labs(
+        title="Distribution of NAS Delay Minutes",
+        subtitle="Total minutes of National Aviation System delays (per airport‑month)",
+        x="Minutes Delayed (NAS)",
+        y="Count",
+    )
+    + theme_minimal()
+)
+```
