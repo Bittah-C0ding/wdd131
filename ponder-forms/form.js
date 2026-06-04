@@ -6,7 +6,7 @@ const notes = document.querySelector("#notes");
 const output = document.querySelector("#output");
 const campusBoxes = document.querySelectorAll('input[name="campus"]');
 
-// Show/hide the travel notes
+// Travel Notes
 function updateNotesField() {
   const value = travelRange.value;
   if (value === "many") {
@@ -31,7 +31,7 @@ function isPastDate(value) {
   return chosen < today;
 }
 
-// Get array of selected campus values
+// Campus values
 function getSelectedCampuses() {
   return Array.from(campusBoxes)
     .filter(box => box.checked)
