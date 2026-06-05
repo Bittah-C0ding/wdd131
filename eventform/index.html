@@ -1,0 +1,87 @@
+<!-- Made by Adrian Hernandez -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Ticket</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎟️</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+
+    <div class="card">
+      <h1>Event Ticket</h1>
+
+      <div class="form-body">
+
+        <div class="row">
+          <div class="field">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="Jane" />
+          </div>
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="Doe" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="jane@example.com" />
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="type">Type</label>
+            <select id="type">
+              <option value="">Choose one</option>
+              <option value="student">Student</option>
+              <option value="guest">Guest</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="eventDate">Event Date</label>
+            <input type="date" id="eventDate" />
+          </div>
+        </div>
+
+        <!-- Hidden div that appears when Student or Guest is selected -->
+        <div id="extraField" class="extra-field">
+          <label id="extraLabel" for="extraInput">Student I#</label>
+          <input type="text" id="extraInput" placeholder="" />
+        </div>
+
+        <button id="submitBtn">Create Ticket</button>
+
+        <!-- Error messages will appear here -->
+        <ul id="errors" class="errors"></ul>
+
+      </div>
+    </div>
+
+    <!-- Success ticket (hidden until form is valid) -->
+    <div id="ticketResult" class="ticket-result">
+      <div class="ticket-top">
+        <span class="ticket-icon">🎟️</span>
+        <div class="ticket-heading">
+          <span class="ticket-eyebrow">Ticket Confirmed</span>
+          <span class="ticket-name" id="ticketName"></span>
+        </div>
+      </div>
+      <div class="ticket-sep">
+        <div class="half-circle left"></div>
+        <div class="dashes"></div>
+        <div class="half-circle right"></div>
+      </div>
+      <div class="ticket-body" id="ticketBody"></div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

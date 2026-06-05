@@ -1,0 +1,313 @@
+/* Made by Adrian Hernandez */
+:root {
+  --bg-top:      #4a1800;
+  --bg-bot:      #1a0500;
+  --card:        #fff8f4;
+  --border:      #e8c5b0;
+  --orange:      #d94f00;
+  --orange-deep: #b33d00;
+  --orange-glow: rgba(217,79,0,0.12);
+  --red:         #9e1a00;
+  --text:        #1e0a00;
+  --muted:       #8a5a40;
+  --input-bg:    #fff1ea;
+  --err-bg:      #fff0ed;
+  --err-text:    #c02800;
+  --err-border:  #f5c0b0;
+  --radius:      6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: radial-gradient(ellipse at top, var(--bg-top) 0%, var(--bg-bot) 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+}
+
+.page {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+/* ── Form card ── */
+.card {
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 2.6rem 2.6rem 2.2rem;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  animation: up 0.4s ease both;
+}
+
+@keyframes up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 1.8rem;
+  border-bottom: 2px solid var(--orange);
+  padding-bottom: 1rem;
+}
+
+.form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+input,
+select {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.65rem 0.85rem;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a5a40'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.2rem;
+  cursor: pointer;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px var(--orange-glow);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+/* ── Hidden extra field ── */
+.extra-field {
+  display: none;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: #fff3ed;
+  border: 1.5px dashed var(--orange);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.extra-field.visible {
+  display: flex;
+}
+
+.extra-field label {
+  color: var(--orange-deep);
+  font-weight: 700;
+}
+
+/* ── Button ── */
+button {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+  box-shadow: 0 4px 18px rgba(217,79,0,0.35);
+}
+
+button:hover  { background: var(--orange-deep); }
+button:active { transform: scale(0.99); }
+
+/* ── Errors ── */
+.errors {
+  display: none;
+  list-style: none;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--err-bg);
+  border: 1px solid var(--err-border);
+  border-radius: var(--radius);
+}
+
+.errors.visible {
+  display: flex;
+}
+
+.errors li {
+  font-size: 0.83rem;
+  color: var(--err-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.errors li::before {
+  content: '✕';
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--err-text);
+  color: #fff;
+  border-radius: 50%;
+  min-width: 15px;
+  height: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Success ticket ── */
+.ticket-result {
+  display: none;
+  flex-direction: column;
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+
+.ticket-result.visible {
+  display: flex;
+  animation: up 0.4s ease both;
+}
+
+.ticket-top {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+  padding: 1.4rem 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ticket-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ticket-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ticket-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+
+.ticket-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+.ticket-sep {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+}
+
+.half-circle {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(ellipse at top, var(--bg-top) 0%, var(--bg-bot) 100%);
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.half-circle.left  { margin-left: -10px;  border-left: none; }
+.half-circle.right { margin-right: -10px; border-right: none; }
+
+.dashes {
+  flex: 1;
+  border-top: 1.5px dashed var(--border);
+}
+
+.ticket-body {
+  padding: 1.6rem 1.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.detail.full { grid-column: 1 / -1; }
+
+.detail-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+@media (max-width: 480px) {
+  .card { padding: 1.8rem 1.4rem; }
+  .row  { grid-template-columns: 1fr; }
+  .ticket-body { grid-template-columns: 1fr; padding: 1.2rem 1.4rem; }
+  .detail.full { grid-column: 1; }
+}
