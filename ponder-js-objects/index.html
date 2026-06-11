@@ -1,0 +1,38 @@
+<!-- Made by Adrian Hernandez -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Course section enrollment using JavaScript objects">
+  <meta name="author" content="Adrian Hernandez">
+  <title>Course Enrollment - Objects Ponder</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <h1 id="courseName"></h1>
+    <h2 id="courseCode"></h2>
+
+    <div class="enroll-area">
+      <label for="sectionNumber">Section Number</label>
+      <input type="number" id="sectionNumber" placeholder="e.g., 1 or 2" min="1">
+      <button id="enrollStudent">Enroll Student</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Section#</th>
+          <th>Room#</th>
+          <th>#Enrolled</th>
+          <th>Days</th>
+          <th>Instructor</th>
+        </tr>
+      </thead>
+      <tbody id="sections"></tbody>
+    </table>
+  </main>
+</body>
+</html>
