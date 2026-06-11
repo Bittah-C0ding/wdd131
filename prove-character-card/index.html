@@ -1,0 +1,46 @@
+<!-- Made by Adrian Hernandez -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Character Card – Nord Warrior with level and health tracking">
+  <meta name="author" content="Adrian Hernandez">
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nord Warrior Character Card">
+  <meta property="og:description" content="A fierce warrior from the northern wilds. Track health, level up, and withstand attacks.">
+  <meta property="og:url" content="https://Bittah-C0ding.github.io/wdd131/charactercard/">
+  <meta property="og:image" content="https://Bittah-C0ding.github.io/wdd131/charactercard/nord-warrior.webp">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nord Warrior Character Card">
+  <meta name="twitter:description" content="A fierce warrior from the northern wilds. Track health, level up, and withstand attacks.">
+  <meta name="twitter:image" content="https://Bittah-C0ding.github.io/wdd131/charactercard/nord-warrior.webp">
+  
+  <!-- Favicon (data URI fallback, replace with actual favicon.ico if needed) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><text y='.9em' font-size='160'>⚔️</text></svg>">
+  
+  <title>Nord Warrior – Character Card</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="card">
+    <img class="image" src="nord-warrior.webp" alt="Nord Warrior character">
+    <div class="name" id="charName">Loading...</div>
+    <div class="stats">
+      <p><strong>Class:</strong> <span id="charClass">-</span></p>
+      <p><strong>Level:</strong> <span id="charLevel">-</span></p>
+      <p><strong>Health:</strong> <span id="charHealth">-</span> / 100</p>
+    </div>
+    <div class="buttons">
+      <button id="attackBtn">⚔️ Attack</button>
+      <button id="levelUpBtn">⬆️ Level Up</button>
+    </div>
+  </div>
+</body>
+</html>
