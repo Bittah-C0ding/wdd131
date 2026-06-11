@@ -7,7 +7,10 @@ const character = {
   image: 'nord-warrior.webp',
 
   attacked() {
-    if (this.health <= 0) return; // already dead
+    if (this.health <= 0) {
+      alert('Character is already dead. Please revive first.');
+      return;
+    }
     const damage = 20;
     this.health -= damage;
     if (this.health <= 0) {
@@ -35,11 +38,10 @@ const character = {
     updateStatsDisplay();
     document.getElementById('attackBtn').disabled = false;
     document.getElementById('reviveBtn').style.display = 'none';
-    alert('The warrior rises again with full health!');
+    alert('✨ The warrior rises again with full health! ✨');
   }
 };
 
-// Get DOM elements
 const nameSpan = document.getElementById('charName');
 const classSpan = document.getElementById('charClass');
 const levelSpan = document.getElementById('charLevel');
@@ -52,10 +54,8 @@ function updateStatsDisplay() {
   healthSpan.textContent = character.health;
 }
 
-// Initial render
 updateStatsDisplay();
 
-// Event listeners
 document.getElementById('attackBtn').addEventListener('click', () => {
   character.attacked();
 });

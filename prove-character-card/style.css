@@ -11,7 +11,7 @@ body {
 }
 
 .card {
-  background: #4a4a4a; /* steel gray base */
+  background: #4a4a4a;
   background: linear-gradient(135deg, #5a5a5a, #3a3a3a);
   border-radius: 28px;
   box-shadow: 0 20px 35px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
@@ -28,7 +28,7 @@ body {
 .image {
   width: 100%;
   display: block;
-  border-bottom: 3px solid #8b3c2c; /* red‑brown accent */
+  border-bottom: 3px solid #8b3c2c;
 }
 
 .name {
@@ -36,7 +36,7 @@ body {
   font-weight: bold;
   text-align: left;
   padding: 1rem 1.5rem;
-  background-color: #6b3e2c; /* warm brown */
+  background-color: #6b3e2c;
   color: #f0ebe5;
   letter-spacing: 1px;
   text-shadow: 1px 1px 0 #3a1e12;
@@ -59,7 +59,7 @@ body {
 }
 
 .stats strong {
-  color: #d9a066; /* warm light brown */
+  color: #d9a066;
   font-weight: 600;
 }
 
@@ -75,6 +75,7 @@ body {
   display: flex;
   gap: 1.2rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 button {
@@ -84,7 +85,7 @@ button {
   font-family: inherit;
   border: none;
   border-radius: 50px;
-  background: #8b3c2c; /* burnt red‑brown */
+  background: #8b3c2c;
   color: #faf3e8;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -108,11 +109,21 @@ button:active {
 }
 
 #levelUpBtn {
-  background: #5f6a5c; /* steel gray‑green */
+  background: #5f6a5c;
   box-shadow: 0 3px 0 #3e453b;
 }
+
 #levelUpBtn:hover {
   background: #7f8c7a;
+}
+
+#reviveBtn {
+  background: #4a6b5c;
+  box-shadow: 0 3px 0 #2c4238;
+}
+
+#reviveBtn:hover {
+  background: #6b8f7a;
 }
 
 @media (max-width: 480px) {
@@ -130,11 +141,4 @@ button:active {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
   }
-}
-.revive-btn {
-  background: #4a6b5c !important;  /* muted green for revive */
-  box-shadow: 0 3px 0 #2c4238 !important;
-}
-.revive-btn:hover {
-  background: #6b8f7a !important;
 }
