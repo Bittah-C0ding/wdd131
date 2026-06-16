@@ -1,0 +1,243 @@
+/* Made by Adrian Hernandez */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 20px;
+  max-width: 1280px;
+  margin: auto;
+  padding: 1em;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #f5f7fa;
+  color: #1e2a3e;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* ===== Navigation – desktop ===== */
+.main-nav {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: #003b5c;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  transition: background 0.2s;
+}
+
+.main-nav a:hover {
+  background-color: #d4a843;
+  color: white;
+}
+
+/* ===== Media Card – desktop (image left, text right) ===== */
+.media-card {
+  display: flex;
+  gap: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 0.5rem;
+}
+
+.media-card-image {
+  flex: 0 0 150px;
+}
+
+.media-card-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.media-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.media-card-content h3 {
+  margin: 0 0 0.3rem 0;
+  color: #003b5c;
+}
+
+.media-card-content p {
+  margin: 0;
+  color: #4a627a;
+}
+
+hr {
+  margin-top: 50px;
+  border: none;
+  border-top: 2px solid #d4a843;
+  width: 60px;
+  margin-left: 0;
+}
+
+/* ===== Gallery – desktop ===== */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.gallery .media-card {
+  flex: 1 1 calc(50% - 30px);
+  min-width: 260px;
+  margin: 0;
+}
+
+/* ===== Headings ===== */
+h1 {
+  color: #003b5c;
+  font-size: 2rem;
+}
+
+h2 {
+  color: #2c7da0;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+/* ============================================
+   MOBILE FIRST – Improved for small screens
+   ============================================ */
+
+/* --- Tablets (≤ 768px) --- */
+@media (max-width: 768px) {
+  body {
+    padding: 0.8rem;
+    font-size: 17px;
+  }
+
+  /* Navigation: stack vertically with bigger touch targets */
+  .main-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .main-nav a {
+    display: block;
+    padding: 0.8rem 1rem;
+    text-align: center;
+    background: #eef2f5;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+
+  .main-nav a:hover {
+    background: #d4a843;
+  }
+
+  /* Media card: image on top, text below */
+  .media-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .media-card-image {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .media-card-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .media-card-content p {
+    font-size: 0.95rem;
+  }
+
+  /* Gallery: full width cards */
+  .gallery .media-card {
+    flex: 1 1 100%;
+  }
+
+  .gallery {
+    gap: 20px;
+  }
+
+  hr {
+    width: 100%;
+    margin: 30px 0;
+  }
+}
+
+/* --- Small phones (≤ 480px) --- */
+@media (max-width: 480px) {
+  body {
+    padding: 0.6rem;
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .main-nav a {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .media-card {
+    padding: 0.8rem;
+    border-radius: 8px;
+  }
+
+  .media-card-image {
+    max-width: 200px;
+  }
+
+  .media-card-content h3 {
+    font-size: 1rem;
+  }
+
+  .media-card-content p {
+    font-size: 0.85rem;
+  }
+
+  .gallery {
+    gap: 14px;
+  }
+
+  /* smaller gap in nav for tight screens */
+  .main-nav {
+    gap: 4px;
+  }
+}
+
+/* --- Extra small (≤ 360px) --- */
+@media (max-width: 360px) {
+  body {
+    padding: 0.4rem;
+    font-size: 14px;
+  }
+
+  .media-card-image {
+    max-width: 150px;
+  }
+}
