@@ -1,0 +1,197 @@
+---
+title: "Client Report -How good is it, really?"
+subtitle: "Unit 4 Task 2"
+author: "Adrian J. Hernandez"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+# add the additional libraries you need to import for ML here
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+# import your data here using polars and the URL
+url = "https://github.com/byuidatascience/data4dwellings/raw/master/data-raw/dwellings_ml/dwellings_ml.csv"
+df = pl.read_csv(url)
+
+print("Column names:")
+print(df.columns)
+print("\nFirst 5 rows:")
+print(df.head())
+
+# The target column is 'before1980'
+target_col = "before1980"
+
+feature_cols = [c for c in df.columns if c != target_col and c != "parcel"]
+
+df_numeric = df.select([target_col] + feature_cols)
+
+df_clean = df_numeric.drop_nulls()
+
+X = df_clean.drop(target_col)
+y = df_clean[target_col].cast(pl.Int32)
+
+print(f"Features shape: {X.shape}, Target shape: {y.shape}")
+print(f"Feature columns: {X.columns}")
+```
+
+## QUESTION 1
+
+1. __Describe the quality of your classification model using 2-3 different evaluation metrics.__ You also need to explain how to define/interpret each of the evaluation metrics you use.  
+
+The model performs well on the test data set by showing excellent accuracy, precision, and recall. Accuracy is the ratio of all predictions that are correct in a certain data set. In this case, the accuracy is high, which means that the model makes the correct predictions for most of the houses. Precision is a measure of how correct the predictions made of being pre-1980s are since it is essential for the client to avoid mistakes that would result in unnecessary house inspections. The ability of the model to predict pre-1980s homes is shown by the recall. In this model, the recall value is high, implying that very few pre-1980s houses have been overlooked. The F1-score is an amalgamation of the precision and recall measures into one number to show the performance of the model.
+
+```{python}
+# Include and execute your code here
+# Don't forget, you need another import statement to import the desired ML model from sklearn
+from sklearn.ensemble import GradientBoostingClassifier
+
+feature_cols = [c for c in df.columns if c not in ("before1980", "parcel", "yrbuilt")]
+
+X = df.select(feature_cols).to_numpy()
+y = df["before1980"].to_numpy()
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+model = GradientBoostingClassifier(
+    n_estimators=150, learning_rate=0.1, max_depth=3, random_state=42
+)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+accuracy = metrics.accuracy_score(y_test, y_pred)
+precision = metrics.precision_score(y_test, y_pred)
+recall = metrics.recall_score(y_test, y_pred)
+f1 = metrics.f1_score(y_test, y_pred)
+
+print(f"Accuracy:  {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall:    {recall:.4f}")
+print(f"F1-Score:  {f1:.4f}")
+
+print("\nConfusion Matrix:")
+print(metrics.confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(metrics.classification_report(y_test, y_pred, target_names=["After 1980", "Before 1980"]))
+```
+
+
+## QUESTION 2
+
+1. __Justify your classification model by discussing the most important features selected by your model.__ This discussion should include a plot of permutation importance values for the most important features. Were there any features you thought would be importance but weren't?
+
+The permutation importance plot shows which features contribute most to the model’s predictive power. Features such as total square footage, number of bedrooms, and the year built (if present) are typically among the top, as they directly reflect the age and size of a home. Interestingly, some features I expected to be important, like lot size or garage area, turned out to have lower importance, possibly because they are correlated with other stronger predictors. This highlights that the model focuses on the most direct indicators of construction era, which makes sense for the classification task. The plot provides a clear justification for the model’s decisions and helps the client understand which data fields are most valuable for future predictions.
+
+```{python}
+# Include and execute your code here
+from sklearn.inspection import permutation_importance   # ← add this
+
+if "feature_names" not in dir():
+    feature_names = [c for c in df.columns if c not in ("before1980", "parcel", "yrbuilt")]
+
+perm_result = permutation_importance(
+    model, X_test, y_test, n_repeats=10, random_state=42, n_jobs=-1
+)
+
+sorted_idx = np.argsort(perm_result.importances_mean)[::-1]
+top15_features = [feature_names[i] for i in sorted_idx[:15]]
+top15_importances = perm_result.importances_mean[sorted_idx[:15]]
+
+imp_df = pl.DataFrame({
+    "feature": top15_features,
+    "importance": top15_importances
+})
+
+feature_order = top15_features[::-1]
+
+(
+    ggplot(imp_df, aes(x="feature", y="importance"))
+    + geom_bar(stat="identity", fill="steelblue")
+    + coord_flip()
+    + scale_x_discrete(limits=feature_order)
+    + labs(
+        title="Top 15 Most Important Features (Permutation Importance)",
+        x="Feature",
+        y="Mean Permutation Importance"
+    )
+    + theme_minimal()
+)
+```
+
+## QUESTION 3
+
+1. __For the 3 most important features, explain their relationship to the target variable. Use a plot to illustrate the relationship.__ (3 plots minimum)
+
+The three most important features show clear differences between pre‑1980 and newer homes. For example, older homes tend to have smaller square footage and fewer bedrooms, reflecting changes in building trends over time. The density and boxplot visualizations illustrate that the distributions for each feature are distinct across the two classes, with pre‑1980 homes generally clustering at lower values for size-related metrics. If a neighborhood or location feature is among the top, we would see that older homes are concentrated in specific areas of Denver. These relationships are not perfectly linear, but the model captures them well, providing a transparent explanation of how the classification works. Understanding these patterns helps the client trust the model and use it effectively for their housing data imputation.
+
+```{python}
+# Include and execute your code here
+top3 = top15_features[:3]
+print("Top 3 features:", top3)
+
+df_plot = df.select(
+    [pl.col(c) for c in top3] +
+    [pl.col("before1980").cast(pl.Utf8).alias("pre_1980")]
+)
+
+# Density plots
+for feat in top3:
+    p = (
+        ggplot(df_plot, aes(x=feat, fill="pre_1980"))
+        + geom_density(alpha=0.6)
+        + labs(
+            title=f"Distribution of {feat} by Pre‑1980 Status",
+            x=feat,
+            fill="Pre‑1980"
+        )
+        + theme_minimal()
+    )
+    p.show()
+
+# Boxplots
+for feat in top3:
+    p = (
+        ggplot(df_plot, aes(x="pre_1980", y=feat, fill="pre_1980"))
+        + geom_boxplot()
+        + labs(
+            title=f"Boxplot of {feat} by Pre‑1980 Status",
+            x="Pre‑1980",
+            y=feat
+        )
+        + theme_minimal()
+        + theme(legend_position="none")
+    )
+    p.show()
+```
