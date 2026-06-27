@@ -4,37 +4,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Delicious apple crisp recipe – easy to make and perfect for fall.">
+  <meta name="description" content="Browse and search delicious recipes.">
   <meta name="author" content="Adrian Hernandez">
 
-  <!-- ===== Open Graph (Facebook, LinkedIn, etc.) ===== -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Apple Crisp – Recipe Book">
-  <meta property="og:description" content="A classic apple crisp recipe with a buttery, crumbly topping.">
+  <meta property="og:title" content="Recipe Book">
+  <meta property="og:description" content="Browse and search delicious recipes.">
   <meta property="og:url" content="https://Bittah-C0ding.github.io/wdd131/recipes/">
-  <meta property="og:image" content="https://Bittah-C0ding.github.io/wdd131/recipes/images/social-preview.jpg">
 
-  <!-- ===== Twitter Card ===== -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Apple Crisp – Recipe Book">
-  <meta name="twitter:description" content="A classic apple crisp recipe with a buttery, crumbly topping.">
-  <meta name="twitter:image" content="https://Bittah-C0ding.github.io/wdd131/recipes/images/social-preview.jpg">
-
-  <!-- ===== Favicon & Apple Touch Icon ===== -->
   <link rel="icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- ===== Google Font: Amatic SC ===== -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap">
 
-  <title>Apple Crisp – Recipe Book</title>
+  <title>Recipe Book</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="page">
 
-    <!-- ===== Header: logo + title + search ===== -->
     <header class="header">
       <div class="logo-title">
         <img src="recipe-book.png" alt="Recipe book icon" class="logo">
@@ -46,36 +33,10 @@
       </div>
     </header>
 
-    <!-- ===== Main recipe card ===== -->
-    <main class="recipe-card">
-      <div class="recipe-image">
-        <img src="apple-crisp.jpg" alt="Apple crisp served in a baking dish">
-      </div>
-      <div class="recipe-content">
-        <span class="tag">dessert</span>
-        <h2>Apple Crisp</h2>
-
-        <!-- ===== Rating with accessibility ===== -->
-        <span class="rating" role="img" aria-label="Rating: 4 out of 5 stars">
-          <span aria-hidden="true" class="star">⭐</span>
-          <span aria-hidden="true" class="star">⭐</span>
-          <span aria-hidden="true" class="star">⭐</span>
-          <span aria-hidden="true" class="star">⭐</span>
-          <span aria-hidden="true" class="star-empty">☆</span>
-        </span>
-
-        <p class="description">
-          A classic apple crisp with a buttery, crumbly topping – perfect for fall desserts.
-          Serve warm with vanilla ice cream.
-        </p>
-        <div class="recipe-meta">
-          <span>⏱️ 45 min</span>
-          <span>🍽️ 8 servings</span>
-        </div>
-      </div>
+    <main id="recipe-list">
+      <!-- Recipe cards injected by recipes.js -->
     </main>
 
-    <!-- ===== Footer: attribution + social icons ===== -->
     <footer class="footer">
       <div class="attribution">
         <a href="https://www.flaticon.com/free-icons/recipe" title="recipe icons">
@@ -83,7 +44,6 @@
         </a>
       </div>
       <div class="social">
-        <!-- Social media icons provided under CC from https://www.iconfinder.com/AlfredoCreates -->
         <a href="#"><img src="https://wddbyui.github.io/wdd131/images/recipe1/instagram_icon.svg" alt="Instagram"></a>
         <a href="#"><img src="https://wddbyui.github.io/wdd131/images/recipe1/youtube_icon.svg" alt="YouTube"></a>
         <a href="#"><img src="https://wddbyui.github.io/wdd131/images/recipe1/pinterest_icon.svg" alt="Pinterest"></a>
@@ -91,5 +51,7 @@
     </footer>
 
   </div>
+
+  <script src="recipes.js"></script>
 </body>
 </html>
