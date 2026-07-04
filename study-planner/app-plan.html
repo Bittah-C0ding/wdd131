@@ -1,0 +1,270 @@
+<!-- Made by Adrian Hernandez -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site Plan: Study Planner</title>
+  <link rel="stylesheet" href="styles/site-plan.css" />
+</head>
+<body>
+  <header>
+    <h1>Study Planner Site Plan</h1>
+    <h2>Adrian Hernandez</h2>
+    <h2>WDD 131 – Dynamic Web Fundamentals</h2>
+  </header>
+
+  <main>
+    <!-- ------------------------ Overview ----------------------- -->
+    <hr />
+    <h2>Overview</h2>
+    <h3>Purpose</h3>
+    <p>
+      The Study Planner is a task management tool designed for university students.
+      It helps users organize assignments, track deadlines, and manage study tasks
+      by course and priority. The app provides a clear dashboard with statistics,
+      filtering and sorting options, and a calendar view to visualize upcoming due
+      dates. The goal is to reduce academic stress and improve time management.
+    </p>
+
+    <h3>Audience</h3>
+    <p>
+      This app is intended for college and university students who need a simple,
+      effective way to track their coursework. The target audience includes students
+      managing multiple classes, assignments, and deadlines. The app works on all
+      devices – phone, tablet, and desktop – so students can update their tasks
+      anywhere, anytime.
+    </p>
+
+    <hr />
+    <h2>Dynamic Elements</h2>
+    <p>
+      JavaScript will be used to make the Study Planner interactive and functional.
+      The following dynamic features will be implemented:
+    </p>
+    <ul>
+      <li>
+        <strong>Objects &amp; Arrays:</strong> Tasks will be stored as an array of
+        objects. Each task object will have properties: <code>id</code>,
+        <code>title</code>, <code>course</code>, <code>dueDate</code>,
+        <code>priority</code> (high/medium/low), <code>notes</code>, and
+        <code>completed</code> (boolean).
+      </li>
+      <li>
+        <strong>Array Methods:</strong>
+        <ul>
+          <li><code>.forEach()</code> – Render each task card to the DOM.</li>
+          <li><code>.filter()</code> – Filter tasks by status (active/completed),
+            priority, and course.</li>
+          <li><code>.sort()</code> – Sort tasks by due date, priority, or title.</li>
+          <li><code>.reduce()</code> – Calculate average priority and total task
+            counts for dashboard statistics.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>DOM Interaction:</strong>
+        <ul>
+          <li>Select elements using <code>document.querySelector</code> and
+            <code>getElementById</code>.</li>
+          <li>Modify the DOM by rendering task cards dynamically when tasks are
+            added, deleted, or updated.</li>
+          <li>Listen for and react to events: click (add/delete/toggle tasks),
+            change (filter/sort dropdowns), submit (add task form).</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Conditional Branching:</strong>
+        <ul>
+          <li>Check if tasks are overdue by comparing due dates to today's date.</li>
+          <li>Validate form inputs (e.g., title and due date are required).</li>
+          <li>Show/hide the add task page based on navigation.</li>
+          <li>Display messages when no tasks match the current filters.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Local Storage:</strong> Tasks will be saved in the browser's
+        <code>localStorage</code> so that data persists between sessions.
+      </li>
+    </ul>
+
+    <hr />
+    <h2>Pseudocode – Computational Thinking</h2>
+    <pre>
+1. Define an array `tasks` to store task objects.
+2. Define a counter `nextId` to assign unique IDs.
+3. Create a `saveTasks()` function to store `tasks` in localStorage.
+4. Create a `loadTasks()` function to retrieve tasks from localStorage on page load.
+5. Create `renderTasks()` function:
+   a. Get values from filter dropdowns (status, priority, course) and sort dropdown.
+   b. Use `.filter()` to create a filtered array based on selected criteria.
+   c. Use `.sort()` to sort the filtered array.
+   d. If no tasks match, display a "no tasks" message.
+   e. Otherwise, use `.forEach()` to generate HTML for each task card and insert into the DOM.
+   f. Update dashboard statistics.
+   g. Reattach event listeners to delete and toggle buttons.
+6. Create `updateStats()` function:
+   a. Use `.reduce()` to calculate total, completed, overdue, and average priority.
+   b. Update the stat cards in the dashboard.
+7. Create `addTask(taskData)` function:
+   a. Create a new task object with id, title, course, dueDate, priority, notes, completed: false.
+   b. Push to `tasks` array.
+   c. Save to localStorage.
+   d. Re-render tasks.
+8. Create `deleteTask(id)` function:
+   a. Use `.filter()` to remove the task with the matching id.
+   b. Save to localStorage.
+   c. Re-render tasks.
+9. Create `toggleComplete(id)` function:
+   a. Use `.find()` to locate the task with the matching id.
+   b. Toggle the `completed` property.
+   c. Save to localStorage.
+   d. Re-render tasks.
+10. Create `renderCalendar()` function:
+    a. Get the current month/year.
+    b. Loop through each day of the month.
+    c. Count tasks due on each day using `.filter()`.
+    d. Render a calendar grid with task indicators.
+11. Attach event listeners:
+    a. Tab navigation: switch between Dashboard, Add Task, and Calendar views.
+    b. Add Task button → show the Add Task page.
+    c. Task form submit → call `addTask()`.
+    d. Filter/sort dropdowns → call `renderTasks()`.
+    e. Delete button on each card → call `deleteTask()`.
+    f. Toggle complete button on each card → call `toggleComplete()`.
+12. On page load:
+    a. Call `loadTasks()` to retrieve tasks.
+    b. Call `renderTasks()` to display tasks.
+    c. Call `renderCalendar()` to display the calendar.
+    d. Populate the course filter dropdown with unique course names.
+    </pre>
+
+    <hr />
+    <h2>Wireframes</h2>
+
+    <h3>Mobile View (Dashboard)</h3>
+    <div style="border:2px solid #ccc;padding:1rem;max-width:350px;margin:0 auto;text-align:center;border-radius:12px;">
+      <div style="background:#396e94;color:white;padding:0.5rem;border-radius:8px;">📚 Study Planner</div>
+      <div style="display:flex;gap:0.3rem;justify-content:center;margin:0.5rem 0;">
+        <button style="background:#e7c24f;border:none;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;">Dashboard</button>
+        <button style="background:#dce4ec;border:none;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;">Add</button>
+        <button style="background:#dce4ec;border:none;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;">Calendar</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;margin:0.5rem 0;">
+        <div style="background:#f0f4f8;border-radius:8px;padding:0.3rem;">
+          <div style="font-size:1.2rem;font-weight:700;">4</div>
+          <div style="font-size:0.6rem;">Total</div>
+        </div>
+        <div style="background:#f0f4f8;border-radius:8px;padding:0.3rem;">
+          <div style="font-size:1.2rem;font-weight:700;">2</div>
+          <div style="font-size:0.6rem;">Overdue</div>
+        </div>
+      </div>
+      <div style="border:1px solid #ddd;border-radius:8px;padding:0.3rem;margin:0.3rem 0;text-align:left;border-left:4px solid #a42212;">
+        <div style="font-weight:bold;font-size:0.85rem;">Finish WDD 131 Project</div>
+        <div style="font-size:0.7rem;color:#5a6874;">WDD 131 • Due: Jul 20</div>
+      </div>
+      <div style="border:1px solid #ddd;border-radius:8px;padding:0.3rem;margin:0.3rem 0;text-align:left;border-left:4px solid #e7c24f;">
+        <div style="font-weight:bold;font-size:0.85rem;">Study for CSE 110</div>
+        <div style="font-size:0.7rem;color:#5a6874;">CSE 110 • Due: Jul 25</div>
+      </div>
+      <button style="background:#396e94;color:white;border:none;padding:0.3rem;border-radius:30px;width:100%;margin-top:0.3rem;font-size:0.8rem;">+ Add Task</button>
+    </div>
+
+    <h3>Desktop View (Dashboard)</h3>
+    <div style="border:2px solid #ccc;padding:1rem;max-width:700px;margin:1rem auto;border-radius:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+        <div style="background:#396e94;color:white;padding:0.3rem 0.8rem;border-radius:8px;font-size:1.2rem;">📚 Study Planner</div>
+        <div style="display:flex;gap:0.5rem;">
+          <button style="background:#e7c24f;border:none;padding:0.2rem 1rem;border-radius:20px;">Dashboard</button>
+          <button style="background:#dce4ec;border:none;padding:0.2rem 1rem;border-radius:20px;">Add</button>
+          <button style="background:#dce4ec;border:none;padding:0.2rem 1rem;border-radius:20px;">Calendar</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-bottom:0.5rem;">
+        <div style="background:#f0f4f8;border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.5rem;font-weight:700;">4</div>
+          <div style="font-size:0.7rem;">Total Tasks</div>
+        </div>
+        <div style="background:#f0f4f8;border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.5rem;font-weight:700;">1</div>
+          <div style="font-size:0.7rem;">Completed</div>
+        </div>
+        <div style="background:#f0f4f8;border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.5rem;font-weight:700;color:#a42212;">2</div>
+          <div style="font-size:0.7rem;">Overdue</div>
+        </div>
+        <div style="background:#f0f4f8;border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.5rem;font-weight:700;">2.3</div>
+          <div style="font-size:0.7rem;">Avg Priority</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <select style="padding:0.2rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;">
+          <option>All Status</option>
+        </select>
+        <select style="padding:0.2rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;">
+          <option>All Priority</option>
+        </select>
+        <select style="padding:0.2rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;">
+          <option>All Courses</option>
+        </select>
+        <select style="padding:0.2rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;">
+          <option>Sort by Due Date</option>
+        </select>
+      </div>
+      <div style="border:1px solid #ddd;border-radius:8px;padding:0.5rem;margin:0.3rem 0;display:flex;justify-content:space-between;border-left:4px solid #a42212;">
+        <div>
+          <div style="font-weight:bold;">Finish WDD 131 Project</div>
+          <div style="font-size:0.8rem;color:#5a6874;">WDD 131 • Due: Jul 20 • High</div>
+        </div>
+        <div style="display:flex;gap:0.3rem;">
+          <button style="background:#2c7da0;color:white;border:none;padding:0.1rem 0.6rem;border-radius:20px;font-size:0.7rem;">✅ Done</button>
+          <button style="background:#a42212;color:white;border:none;padding:0.1rem 0.6rem;border-radius:20px;font-size:0.7rem;">✕</button>
+        </div>
+      </div>
+      <div style="border:1px solid #ddd;border-radius:8px;padding:0.5rem;margin:0.3rem 0;display:flex;justify-content:space-between;border-left:4px solid #e7c24f;">
+        <div>
+          <div style="font-weight:bold;">Study for CSE 110</div>
+          <div style="font-size:0.8rem;color:#5a6874;">CSE 110 • Due: Jul 25 • Medium</div>
+        </div>
+        <div style="display:flex;gap:0.3rem;">
+          <button style="background:#2c7da0;color:white;border:none;padding:0.1rem 0.6rem;border-radius:20px;font-size:0.7rem;">✅ Done</button>
+          <button style="background:#a42212;color:white;border:none;padding:0.1rem 0.6rem;border-radius:20px;font-size:0.7rem;">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <h3>Mobile View (Add Task)</h3>
+    <div style="border:2px solid #ccc;padding:1rem;max-width:350px;margin:0 auto;text-align:center;border-radius:12px;">
+      <div style="background:#396e94;color:white;padding:0.5rem;border-radius:8px;">📚 Add New Task</div>
+      <div style="text-align:left;margin-top:0.5rem;">
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-weight:600;font-size:0.8rem;">Task Title *</label>
+          <input style="width:100%;padding:0.3rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;" placeholder="e.g., Finish WDD 131" />
+        </div>
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-weight:600;font-size:0.8rem;">Course</label>
+          <input style="width:100%;padding:0.3rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;" placeholder="e.g., WDD 131" />
+        </div>
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-weight:600;font-size:0.8rem;">Due Date *</label>
+          <input type="date" style="width:100%;padding:0.3rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;" />
+        </div>
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-weight:600;font-size:0.8rem;">Priority</label>
+          <select style="width:100%;padding:0.3rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;">
+            <option>Low</option>
+            <option selected>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+        <div style="margin-bottom:0.5rem;">
+          <label style="font-weight:600;font-size:0.8rem;">Notes</label>
+          <textarea rows="2" style="width:100%;padding:0.3rem;border:1px solid #ddd;border-radius:8px;font-size:0.8rem;" placeholder="Additional details..."></textarea>
+        </div>
+        <button style="background:#396e94;color:white;border:none;padding:0.4rem;border-radius:30px;width:100%;font-size:0.8rem;">Add Task</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
