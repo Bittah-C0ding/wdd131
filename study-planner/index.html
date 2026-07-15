@@ -1,0 +1,176 @@
+<!-- Made by Adrian Hernandez -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Study Planner – organize assignments, track deadlines, and manage tasks" />
+  <meta name="author" content="Adrian Hernandez" />
+
+  <!-- Social Media / Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Study Planner – Task Manager" />
+  <meta property="og:description" content="Organize your assignments and study tasks with ease." />
+  <meta property="og:url" content="https://Bittah-C0ding.github.io/wdd131/study-planner/" />
+  <meta property="og:image" content="https://Bittah-C0ding.github.io/wdd131/study-planner/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Study Planner – Task Manager" />
+  <meta name="twitter:description" content="Organize your assignments and study tasks with ease." />
+  <meta name="twitter:image" content="https://Bittah-C0ding.github.io/wdd131/study-planner/og-image.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>" />
+
+  <title>Study Planner – Task Manager</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="main.js"></script>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-left">
+        <img src="bigger-transparent-logo.svg" alt="Study Planner logo" class="logo-img" />
+        <h1>Study Planner</h1>
+        <div class="user-name">
+          <label for="userNameInput">👤</label>
+          <input type="text" id="userNameInput" placeholder="Your Name" />
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="theme-toggle">
+          <select id="themeSelect">
+            <option value="light">☀️ Light</option>
+            <option value="dark">🌙 Dark</option>
+          </select>
+        </div>
+        <button id="addTaskBtn" class="btn primary">+ New Task</button>
+      </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="add">Add Task</button>
+      <button class="tab" data-tab="calendar">Calendar</button>
+    </nav>
+
+    <!-- DASHBOARD PAGE -->
+    <section id="dashboard" class="page active">
+      <!-- Stats Cards -->
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <span class="stat-number" id="totalTasks">0</span>
+          <span class="stat-label">Total Tasks</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="completedTasks">0</span>
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="overdueTasks">0</span>
+          <span class="stat-label">Overdue</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="avgPriority">0</span>
+          <span class="stat-label">Avg Priority</span>
+        </div>
+      </div>
+
+      <!-- Filters & Sorting Controls -->
+      <div class="controls">
+        <div class="filter-group">
+          <label for="filterStatus">Status</label>
+          <select id="filterStatus">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterPriority">Priority</label>
+          <select id="filterPriority">
+            <option value="all">All</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterCourse">Course</label>
+          <select id="filterCourse">
+            <option value="all">All</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="sortBy">Sort By</label>
+          <select id="sortBy">
+            <option value="dueDate">Due Date</option>
+            <option value="priority">Priority</option>
+            <option value="title">Title</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Task List -->
+      <div id="taskList" class="task-list"></div>
+    </section>
+
+    <!-- TASK PAGE -->
+    <section id="add" class="page">
+      <h2>Add New Task</h2>
+      <form id="taskForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskTitle">Task Title *</label>
+            <input type="text" id="taskTitle" placeholder="e.g., Finish WDD 131 Project" required />
+          </div>
+          <div class="form-group">
+            <label for="taskCourse">Course</label>
+            <input type="text" id="taskCourse" placeholder="e.g., WDD 131" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskDueDate">Due Date *</label>
+            <input type="date" id="taskDueDate" required />
+          </div>
+          <div class="form-group">
+            <label for="taskPriority">Priority</label>
+            <select id="taskPriority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="taskNotes">Notes</label>
+          <textarea id="taskNotes" rows="3" placeholder="Additional details..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Add Task</button>
+          <button type="reset" class="btn secondary" id="cancelAdd">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- CALENDAR PAGE -->
+    <section id="calendar" class="page">
+      <h2>Calendar View</h2>
+      <div id="calendarGrid"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>&copy; 2026 <span id="footerName">Adrian Hernandez</span> | Study Planner</p>
+    </footer>
+
+  </div>
+</body>
+</html>
