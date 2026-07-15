@@ -1,43 +1,44 @@
 // Made by Adrian Hernandez
 
+/* Data */
 let tasks = [];
 let nextId = 1;
 
 const sampleTasks = [
   {
     id: 1,
-    title: 'Finish WDD 131 Final Project',
-    course: 'WDD 131',
-    dueDate: getDateString(7),
-    priority: 'high',
-    notes: 'Complete all dynamic JS features and Lighthouse scores.',
+    title: '📚 Welcome to Study Planner!',
+    course: 'Demo',
+    dueDate: getDateString(3),
+    priority: 'medium',
+    notes: 'This is your dashboard. You can see your total tasks, completed items, overdue tasks, and average priority at a glance.',
     completed: false,
   },
   {
     id: 2,
-    title: 'Study for CSE 110 Exam',
-    course: 'CSE 110',
-    dueDate: getDateString(14),
-    priority: 'medium',
-    notes: 'Review loops, arrays, and objects.',
+    title: '📅 Check Your Due Dates',
+    course: 'Demo',
+    dueDate: getDateString(5),
+    priority: 'high',
+    notes: 'Use the calendar tab to view all your upcoming deadlines. Click any day with tasks to jump back to your dashboard.',
     completed: false,
   },
   {
     id: 3,
-    title: 'Submit Math Homework',
-    course: 'MATH 108',
-    dueDate: getDateString(2),
-    priority: 'high',
-    notes: 'Chapters 5-7 problems.',
+    title: '📝 Add Notes to Your Tasks',
+    course: 'Demo',
+    dueDate: getDateString(7),
+    priority: 'low',
+    notes: 'You can add notes to any task for extra details. Click the "Add Task" tab to create your own tasks with notes!',
     completed: false,
   },
   {
     id: 4,
-    title: 'Read WDD 131 Week 12 Materials',
-    course: 'WDD 131',
-    dueDate: getDateString(1),
+    title: '🗑️ Delete This Demo Task',
+    course: 'Demo',
+    dueDate: getDateString(2),
     priority: 'medium',
-    notes: 'Review flexbox and grid.',
+    notes: 'You can delete any task by clicking the red ✕ button. These demo tasks are here to help you get started – feel free to delete them and create your own!',
     completed: false,
   },
 ];
@@ -48,7 +49,7 @@ function getDateString(daysFromNow) {
   return date.toISOString().split('T')[0];
 }
 
-/* LOCAL STORAGE */
+/* Local Storage */
 function loadTasks() {
   const stored = localStorage.getItem('studyPlannerTasks');
   if (stored) {
@@ -89,7 +90,7 @@ function saveTheme(theme) {
   document.body.classList.toggle('dark', theme === 'dark');
 }
 
-/* DOM REFERENCES */
+/* DOM References */
 const tabs = document.querySelectorAll('.tab');
 const pages = {
   dashboard: document.getElementById('dashboard'),
@@ -115,7 +116,7 @@ const cancelAddBtn = document.getElementById('cancelAdd');
 const userNameInput = document.getElementById('userNameInput');
 const themeSelect = document.getElementById('themeSelect');
 
-/* TAB NAVIGATION */
+/* Tab Navigation */
 tabs.forEach((tab) => {
   tab.addEventListener('click', () => {
     tabs.forEach((t) => t.classList.remove('active'));
@@ -148,7 +149,7 @@ cancelAddBtn.addEventListener('click', () => {
   taskForm.reset();
 });
 
-/* RENDER FUNCTIONS */
+/* Render Functions */
 function renderTaskCard(task) {
   const priorityClass = `priority-${task.priority}`;
   const completedClass = task.completed ? 'completed' : '';
@@ -235,7 +236,7 @@ function renderTasks() {
   attachTaskEvents();
 }
 
-/* STATS */
+/* Stats */
 function updateStats() {
   const total = tasks.length;
   const completed = tasks.filter((task) => task.completed).length;
@@ -278,7 +279,7 @@ function formatDate(dateStr) {
   });
 }
 
-/* TASK OPERATIONS */
+/* Task Operations */
 function addTask(taskData) {
   const newTask = {
     id: nextId++,
@@ -328,7 +329,7 @@ function attachTaskEvents() {
   });
 }
 
-/* FORM SUBMISSION */
+/* Form Submission */
 taskForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
@@ -359,7 +360,7 @@ taskForm.addEventListener('submit', (event) => {
   });
 });
 
-/* CALENDAR */
+/* Calendar */
 function renderCalendar() {
   const grid = document.getElementById('calendarGrid');
   const now = new Date();
@@ -420,7 +421,7 @@ function renderCalendar() {
   });
 }
 
-/* EVENT LISTENERS */
+/* Event Listeners */
 filterStatus.addEventListener('change', renderTasks);
 filterPriority.addEventListener('change', renderTasks);
 filterCourse.addEventListener('change', renderTasks);
@@ -435,7 +436,7 @@ themeSelect.addEventListener('change', function () {
   saveTheme(this.value);
 });
 
-/* INITIALIZATION */
+/* Initialization */
 loadTasks();
 loadUserName();
 loadTheme();
