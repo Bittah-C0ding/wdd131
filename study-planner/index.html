@@ -32,26 +32,27 @@
     <!-- HEADER -->
     <header>
       <div class="header-left">
-        <img src="bigger-transparent-logo.svg" alt="Study Planner logo" class="logo-img" />
+        <img src="transparent-logo.svg" alt="Study Planner logo" class="logo-img" />
         <h1>Study Planner</h1>
         <div class="user-name">
           <label for="userNameInput">👤</label>
-          <input type="text" id="userNameInput" placeholder="Your Name" />
+          <input type="text" id="userNameInput" placeholder="Your Name here" />
         </div>
       </div>
       <div class="header-actions">
         <div class="theme-toggle">
-          <select id="themeSelect">
+          <select id="themeSelect" aria-label="Toggle dark mode">
             <option value="light">☀️ Light</option>
             <option value="dark">🌙 Dark</option>
           </select>
         </div>
         <button id="addTaskBtn" class="btn primary">+ New Task</button>
+        <button id="clearDemosBtn" class="btn secondary" style="font-size:0.7rem;">🗑️ Clear Demos</button>
       </div>
     </header>
 
     <!-- NAVIGATION TABS -->
-    <nav class="tabs">
+    <nav class="tabs" aria-label="Main navigation">
       <button class="tab active" data-tab="dashboard">Dashboard</button>
       <button class="tab" data-tab="add">Add Task</button>
       <button class="tab" data-tab="calendar">Calendar</button>
